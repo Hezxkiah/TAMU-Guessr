@@ -4,10 +4,16 @@ import Card from "../components/Card";
 export default function Home() {
   return (
     <div id="header">
-        <div className="container">
+        <div className="contain">
             {/* Header */}
             <nav className="sono-regular">
-                <img src="images/texasA&MLogo.png" className="logo" />
+                {/* Logo */}
+                <Image src="/texasA&MLogo.png"
+                        width={200}             
+                        height={200}            
+                        alt="Texas A&M Logo"
+                />
+                {/* Navigation */}
                 <ul id="sidemenu" className = "sono-regular">
                     <li><a href="#header"></a></li>
                     <li><a href="#about">About</a></li>
