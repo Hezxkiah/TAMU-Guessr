@@ -47,8 +47,8 @@ export default function Home() {
 
   return (
     <div id="header">
-        <NavBar withoutLogin={true} />
-        
+        <NavBar inLoginPage={true} />
+
         <div className="contain">
             
             {/* --- Login Form --- */}

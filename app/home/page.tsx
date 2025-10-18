@@ -8,24 +8,8 @@ export default function Home() {
     <div id="header">
         <div className="contain">
             {/* Header */}
-            <nav className={styles.Nav + " sono-regular relative"}>
-                <div className="absolute h-full w-70 bg-white left-0"></div>
-                {/* Logo */}
-                <Image src="/texasA&MLogo.png"
-                        width={200}             
-                        height={200}            
-                        alt="Texas A&M Logo"
-                        className="z-100"
-                />
-                {/* Navigation */}
-                <ul id="sidemenu" className = "sono-regular">
-                    <li><a href="#header"></a></li>
-                    <li><a href="#about">Play</a></li>
-                    <li><a href="/login">Login</a></li>
-                </ul>
-            </nav>
-            <NavBar withoutLogin={true} />
-            
+            <NavBar inLoginPage={false} />
+
             {/* Revellie Image */}
             <div className="revellie-image">
                 <Image src="/rev_12thman.png"
