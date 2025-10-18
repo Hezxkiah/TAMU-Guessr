@@ -19,8 +19,8 @@
     border-color: white;
 
     /* 2. Backdrop Shadow Effect: A larger, softer shadow */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25),
-                0 4px 6px rgba(0, 0, 0, 0.1); /* Keep a subtle top shadow */
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.25),
+                0 4px 15px rgba(0, 0, 0, 0.1); /* Keep a subtle top shadow */
     
     /* 3. Optional: Make the cursor a pointer to indicate interactivity */
     cursor: pointer;
