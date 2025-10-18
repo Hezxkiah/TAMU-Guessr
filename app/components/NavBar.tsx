@@ -25,6 +25,10 @@ const NavBar = ({ inLoginPage }: Props) => {
             {!inLoginPage && <li><a href="#about">Play</a></li>}
             {!inLoginPage && <li><a href="/login">Login</a></li>}
         </ul>
+
+        <div className="title-text">
+          <p>Aggie Guessr</p>
+        </div>
     </nav>
   )
 }

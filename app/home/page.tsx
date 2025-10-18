@@ -23,15 +23,7 @@ export default function Home() {
                 <p className="sono-regular">TAMU Guessr</p>
                 <h1 className="sono-regular">This weeks theme is <span>SKATING!</span></h1>
             </div>
-            <a href="/round">
-                <div className={styles.Container}>
-                    <Card title="Play" description="A match of 5 rounds around campus"/>
-                    <Card title="Play" description="A match of 3 rounds around campus"/>
-                    <Card title="Play" description="A match of 1 rounds around campus"/>
-                </div>
-            </a>
-            
-            {/* Game Description */}
+             {/* Game Description */}
             <div id="about" className="about-text">
                 <h2 className="sono-regular">About TAMU Guessr</h2>
                 <p className="sono-regular">
@@ -40,6 +32,16 @@ export default function Home() {
                     The closer the guess, the more points earned! Compete with friends and see who knows the campus best!
                 </p>
             </div>
+            {/* Play Cards */}
+            <a href="/round">
+                <div className={styles.Container}>
+                    <Card title="Play" description="A match of 5 rounds around campus"/>
+                    <Card title="Play" description="A match of 3 rounds around campus"/>
+                    <Card title="Play" description="A match of 1 rounds around campus"/>
+                </div>
+            </a>
+            
+           
             {/* Footer */}
             <div className="footer">
                 <p className="sono-regular">© 2024 TAMU Guessr. All rights reserved.</p>
