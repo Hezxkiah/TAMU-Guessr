@@ -6,11 +6,3 @@
     display: flex;
     justify-content: center;
 }
-
-.Nav {
-    padding-left: 25px;
-    padding-right: 25px;
-    background-color: maroon;
-    border-bottom-color: white;
-    box-shadow: 8px 4px 10px rgba(0, 0, 0, 0.5);
-}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Card from "../components/Card";
 import styles from "./Page.module.css"
+import NavBar from "../components/NavBar";
 
 export default function Home() {
   return (
@@ -23,6 +24,8 @@ export default function Home() {
                     <li><a href="/login">Login</a></li>
                 </ul>
             </nav>
+            <NavBar withoutLogin={true} />
+            
             {/* Revellie Image */}
             <div className="revellie-image">
                 <Image src="/revellie-removebg-preview.png"
