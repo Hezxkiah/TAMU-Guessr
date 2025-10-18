@@ -1,7 +1,7 @@
 .Card {
     height: 100%;
     width: 100%;
-    margin: 10px;
+    margin: 25px;
     background-color: maroon;
     border-radius: 15px;
 
@@ -24,4 +24,8 @@
     
     /* 3. Optional: Make the cursor a pointer to indicate interactivity */
     cursor: pointer;
+}
+
+.TextShadow {
+     /* background-image: linear-gradient(to right, #833ab4, #fd1d1d,#fcb045); */
 }
