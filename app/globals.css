@@ -20,12 +20,6 @@
   }
 }
 
-/* body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
-
 .sono-regular {
   font-family: "Sono", monospace;
   /* font-optical-sizing: auto; */
@@ -119,8 +113,9 @@ nav ul li a:hover::after{
 }
 
 .header-text h1{
-    font-size: 60px;
+    font-size: 40px;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .header-text h1 span{
@@ -142,18 +137,15 @@ nav ul li a:hover::after{
     margin-bottom: 20px;
 }
 
+/* Revellie Image */
 .revellie-image{
-    text-align: center;
     display: flex;
     justify-content: center;
-    margin-bottom: -200px;
+    margin-bottom: -250px;
 }
 
-/* Login Page */
-/* --- Login Form Styles --- */
 
-/* This wrapper centers the form and gives it a clean card look */
-/* You may need to adjust 'margin' to fit your existing layout */
+/* --- Login Form Styles --- */
 .login-form-wrapper {
   max-width: 450px;
   margin: 60px auto; 
@@ -233,3 +225,11 @@ button[type="submit"]:disabled {
   margin-bottom: 20px;
   font-size: 0.95rem;
 }
+
+/* Footer Styles */
+.footer {
+    text-align: center;
+    font-size: 20px;
+    background-color: white;
+    margin-top: 40px;
+}   
