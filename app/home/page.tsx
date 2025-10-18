@@ -1,28 +1,15 @@
 import Image from "next/image";
 import Card from "../components/Card";
 import styles from "./Page.module.css"
+import NavBar from "../components/NavBar";
 
 export default function Home() {
   return (
     <div id="header">
         <div className="contain">
             {/* Header */}
-            <nav className={styles.Nav + " sono-regular relative"}>
-                <div className="absolute h-full w-70 bg-white left-0"></div>
-                {/* Logo */}
-                <Image src="/texasA&MLogo.png"
-                        width={200}             
-                        height={200}            
-                        alt="Texas A&M Logo"
-                        className="z-100"
-                />
-                {/* Navigation */}
-                <ul id="sidemenu" className = "sono-regular">
-                    <li><a href="#header"></a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="/login">Login</a></li>
-                </ul>
-            </nav>
+            <NavBar withoutLogin={true} />
+            
             {/* Revellie Image */}
             <div className="revellie-image">
                 <Image src="/revellie-removebg-preview.png"

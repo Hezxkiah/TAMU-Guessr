@@ -3,8 +3,10 @@
 
 // Added 'useState' for form logic
 import React, { useState, type FormEvent } from 'react';
+import NavBar from '../components/NavBar';
 import Image from "next/image";
 import Link from 'next/link';
+
 
 // 1. Import the router to handle redirects
 import { useRouter } from 'next/navigation';
@@ -47,22 +49,9 @@ export default function Home() {
 
   return (
     <div id="header">
+        <NavBar withoutLogin={true} />
+        
         <div className="contain">
-            {/* Header */}
-            <nav className="sono-regular">
-                <Link href="/">
-                  <Image src="/texasA&MLogo.png"
-                          width={200}            
-                          height={200}           
-                          alt="Texas A&M Logo"
-                  />
-                </Link>
-                
-                <ul id="sidemenu" className = "sono-regular">
-                    <li><a href="#header"></a></li>
-                    <li><a href="/home  ">Home</a></li>
-                </ul>
-            </nav>
             
             {/* --- Login Form --- */}
             <div id="login" className="login-form-wrapper">
