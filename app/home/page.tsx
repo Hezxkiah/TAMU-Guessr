@@ -12,9 +12,9 @@ export default function Home() {
 
             {/* Revellie Image */}
             <div className="revellie-image">
-                <Image src="/rev_12thman.png"
-                        width={300}             
-                        height={300}            
+                <Image src="/revglobalLogo.png"
+                        width={220}             
+                        height={220}            
                         alt="Revellie"
                 />
             </div>
