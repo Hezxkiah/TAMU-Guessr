@@ -20,7 +20,6 @@ export default function Home() {
             </div>
             {/* Main Text */}
             <div className="header-text">
-                <p className="sono-regular">TAMU Guessr</p>
                 <h1 className="sono-regular">This weeks theme is <span>SKATING!</span></h1>
             </div>
              {/* Game Description */}
@@ -31,17 +30,17 @@ export default function Home() {
                     Players are placed in a random location on the Texas A&M campus using Google Street View and must navigate their surroundings to guess their exact location. 
                     The closer the guess, the more points earned! Compete with friends and see who knows the campus best!
                 </p>
-            </div>
+            </div >
             {/* Play Cards */}
-            <a href="/round">
-                <div className={styles.Container}>
-                    <Card title="Quick Round" description="A streetview game seen through the roads of campus!"/>
-                    <Card title="Challenge Round" description="Restricted to a static image for one second!"/>
-                    <Card title="Multiplayer" description="Play with friends through join codes, 5 rounds!"/>
-                </div>
-            </a>
-            
-           
+            <div id = "cards">
+                <a href="/round">
+                    <div className={styles.Container}>
+                        <Card title="Quick Round" description="A streetview game seen through the roads of campus!"/>
+                        <Card title="Challenge Round" description="Restricted to a static image for one second!"/>
+                        <Card title="Multiplayer" description="Play with friends through join codes, 5 rounds!"/>
+                    </div>
+                </a>
+            </div>
             {/* Footer */}
             <div className="footer">
                 <p className="sono-regular">© 2024 TAMU Guessr. All rights reserved.</p>

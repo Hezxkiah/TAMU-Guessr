@@ -42,7 +42,6 @@ export default function Home() {
       setError('Invalid email or password');
       setLoading(false);
     }
-    
   };
 
   return (

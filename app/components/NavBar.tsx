@@ -18,6 +18,10 @@ const NavBar = ({ inLoginPage }: Props) => {
                 alt="Texas A&M Logo"
                 className="z-100"
         />
+        {/* Title */}
+        <h1 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-bold text-white">
+                TAMU Guessr
+        </h1>
         {/* Navigation */}
         <ul id="sidemenu" className = "sono-regular">
             <li><a href="#header"></a></li>
@@ -25,10 +29,6 @@ const NavBar = ({ inLoginPage }: Props) => {
             {!inLoginPage && <li><a href="#about">Play</a></li>}
             {!inLoginPage && <li><a href="/login">Login</a></li>}
         </ul>
-
-        <div className="title-text">
-          <p>Aggie Guessr</p>
-        </div>
     </nav>
   )
 }

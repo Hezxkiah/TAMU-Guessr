@@ -28,6 +28,13 @@
     "MONO" 1; /* This activates the monospaced feature */
 }
 
+.special-elite-regular {
+  font-family: "Special Elite", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
 *{
     margin: 0;
     padding: 0;
@@ -36,7 +43,7 @@
 
 
 body{
-    background: cornsilk;
+    background: #98A869;
     color: black;
 }
 
@@ -108,7 +115,7 @@ nav ul li a:hover::after{
 }
 
 .header-text h1{
-    font-size: 40px;
+    font-size: 50px;
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -129,15 +136,16 @@ nav ul li a:hover::after{
     width: 60%;
     margin: 50px auto;
     text-align: center;
-    padding-bottom: 10x;
+    padding-bottom: 30x;
 }
 
 .about-text h2{
-    font-size: 30px;
+    font-size: 40px;
+    margin-bottom: 20px;
 }
 
 .about-text p{
-    font-size: 20px;
+    font-size: 25px;
 }
 
 /* Revellie Image */
@@ -236,3 +244,8 @@ button[type="submit"]:disabled {
     background-color: white;
     margin-top: 250px;
 }   
+
+/* Cards */
+#cards{
+    margin-top: 50px;
+}
