@@ -90,7 +90,7 @@ nav ul li a::after{
     content: '';
     width: 0;
     height: 3px;
-    background: #d2c1c1;
+    background: white;
     position: absolute;
     left: 0;
     bottom: -6px;
@@ -121,15 +121,23 @@ nav ul li a:hover::after{
     font-size: 45px;
 }
 
+#about {
+  scroll-margin-top: 60px; 
+}
+
 .about-text{
     width: 60%;
     margin: 50px auto;
     text-align: center;
+    padding-bottom: 10x;
 }
 
 .about-text h2{
     font-size: 30px;
-    margin-bottom: 20px;
+}
+
+.about-text p{
+    font-size: 20px;
 }
 
 /* Revellie Image */
@@ -226,5 +234,5 @@ button[type="submit"]:disabled {
     text-align: center;
     font-size: 20px;
     background-color: white;
-    margin-top: 40px;
+    margin-top: 250px;
 }   
