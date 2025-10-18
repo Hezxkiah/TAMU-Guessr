@@ -34,7 +34,7 @@ export default function Home() {
                 <p className="sono-regular">TAMU Guessr</p>
                 <h1 className="sono-regular">This weeks theme is <span>SKATING!</span></h1>
             </div>
-            <a href="/login">
+            <a href="/round">
                 <div className={styles.Container}>
                     <Card title="Play" description="A match of 5 rounds around campus"/>
                     <Card title="Play" description="A match of 3 rounds around campus"/>
