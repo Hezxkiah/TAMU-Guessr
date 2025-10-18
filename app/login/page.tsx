@@ -2,7 +2,7 @@
 "use client";
 
 // Added 'useState' for form logic
-import { useState } from 'react';
+import React, { useState, type FormEvent } from 'react';
 import Image from "next/image";
 import Link from 'next/link';
 
@@ -14,15 +14,15 @@ export default function Home() {
   const router = useRouter();
 
   // State for the login form
-  const [email, setEmail] = new useState('');
-  const [password, setPassword] = new useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   
   // State for error messages
-  const [error, setError] = new useState('');
+  const [error, setError] = useState('');
   // State for loading
-  const [loading, setLoading] = new useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Stop the page from reloading
     setLoading(true);
     setError('');
