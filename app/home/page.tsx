@@ -25,9 +25,18 @@ export default function Home() {
                 <p className="sono-regular">TAMU Guessr</p>
                 <h1 className="sono-regular">This weeks theme is <span>SKATING!</span></h1>
             </div>
-
+            {/* Cards */}
             <div>
                 <Card title="Play" description=""/>
+            </div>
+            {/* Game Description */}
+            <div id="about" className="about-text">
+                <h2 className="sono-regular">About TAMU Guessr</h2>
+                <p className="sono-regular">
+                    TAMU Guessr is a geography guessing game themed around Texas A&M University. 
+                    Players are placed in a random location on the Texas A&M campus using Google Street View and must navigate their surroundings to guess their exact location. 
+                    The closer the guess, the more points earned! Compete with friends and see who knows the campus best!
+                </p>
             </div>
         </div>
     </div>
