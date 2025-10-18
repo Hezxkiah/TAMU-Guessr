@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Card from "../components/Card";
+import styles from "./Page.module.css"
 
 export default function Home() {
   return (
@@ -34,9 +35,11 @@ export default function Home() {
                 <p className="sono-regular">TAMU Guessr</p>
                 <h1 className="sono-regular">This weeks theme is <span>SKATING!</span></h1>
             </div>
-            {/* Cards */}
-            <div>
-                <Card title="Play" description=""/>
+
+            <div className={styles.Container}>
+                <Card title="Play" description="A match of 5 rounds around campus"/>
+                <Card title="Play" description="A match of 3 rounds around campus"/>
+                <Card title="Play" description="A match of 1 rounds around campus"/>
             </div>
             {/* Actual Game */}
             {/* Game Description */}

@@ -1,4 +1,5 @@
 import React from 'react'
+import styles from "./Card.module.css"
 
 interface Props {
     title: string;
@@ -7,9 +8,12 @@ interface Props {
 
 const Card = ({title, description}: Props) => {
   return (
-    <div>
-      <button type="button" className="btn btn-primary">description</button>
-    </div>
+    <>
+      <button type="button" className={styles.Card + " btn btn-primary"}>
+        <h1 className="text-white sono-regular">{title}</h1>
+        <p className="text-white sono-regular m-15">{description}</p>
+      </button>
+    </>
   )
 }
 
