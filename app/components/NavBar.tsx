@@ -9,7 +9,7 @@ interface Props {
 const NavBar = ({ inLoginPage }: Props) => {
     console.log("NavBar - inLoginPage:", inLoginPage);
   return (            
-    <nav className={styles.Nav + " sono-regular relative"}>
+    <nav className={styles.Nav + " special-elite-regular relative"}>
         <div className="absolute h-full w-70 bg-white left-0"></div>
         {/* Logo */}
         <Image src="/texasA&MLogoCropped.png"
@@ -23,7 +23,7 @@ const NavBar = ({ inLoginPage }: Props) => {
                 TAMU Guessr
         </h1>
         {/* Navigation */}
-        <ul id="sidemenu" className = "sono-regular">
+        <ul id="sidemenu" className = "special-elite-regular">
             <li><a href="#header"></a></li>
             {inLoginPage && <li><a href="/home">Home</a></li>}
             {!inLoginPage && <li><a href="#about">Play</a></li>}

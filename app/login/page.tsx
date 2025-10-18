@@ -52,7 +52,7 @@ export default function Home() {
             
             {/* --- Login Form --- */}
             <div id="login" className="login-form-wrapper">
-              <h1 className="sono-regular">Login to Your Account</h1>
+              <h1 className="special-elite-regular">Login to Your Account</h1>
               
               <form onSubmit={handleSubmit}>
                 
@@ -82,7 +82,7 @@ export default function Home() {
                   />
                 </div>
 
-                <button type="submit" disabled={loading} className="sono-regular">
+                <button type="submit" disabled={loading} className="special-elite-regular">
                   {loading ? 'Logging in...' : 'Login'}
                 </button>
               </form>
