@@ -7,12 +7,14 @@ export default function Home() {
     <div id="header">
         <div className="contain">
             {/* Header */}
-            <nav className="sono-regular">
+            <nav className={styles.Nav + " sono-regular relative"}>
+                <div className="absolute h-full w-70 bg-white left-0"></div>
                 {/* Logo */}
                 <Image src="/texasA&MLogo.png"
                         width={200}             
                         height={200}            
                         alt="Texas A&M Logo"
+                        className="z-100"
                 />
                 {/* Navigation */}
                 <ul id="sidemenu" className = "sono-regular">
