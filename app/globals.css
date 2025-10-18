@@ -43,7 +43,7 @@
 
 
 body{
-    background: #98A869;
+    background: #CDC4AA;
     color: black;
 }
 
@@ -97,7 +97,7 @@ nav ul li a::after{
     content: '';
     width: 0;
     height: 3px;
-    background: white;
+    background: #CDC4AA;
     position: absolute;
     left: 0;
     bottom: -6px;
