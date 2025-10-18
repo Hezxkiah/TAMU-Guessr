@@ -4,7 +4,6 @@
 // Added 'useState' for form logic
 import { useState } from 'react';
 import Image from "next/image";
-import Card from "../components/Card";
 
 export default function Home() {
   // --- State for the login form ---
@@ -15,7 +14,7 @@ export default function Home() {
 
   // --- Form submission handler ---
   const handleSubmit = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault(); // Stop the page from reloading
     setLoading(true);
     setError('');
 
@@ -91,6 +90,7 @@ export default function Home() {
               </form>
             </div>
             {/* --- End of Login Form --- */}
+            
         </div>
     </div>
   );

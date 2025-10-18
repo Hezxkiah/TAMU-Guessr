@@ -3,15 +3,18 @@ import { useEffect } from "react";
 
 export default function Home() {
   useEffect(() => {
-    // Dynamically load the Google Maps script
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    if (!apiKey) {
+      console.error("❌ Missing Google Maps API key");
+      return;
+    }
+
     const script = document.createElement("script");
-    script.src =
-      "https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap&libraries=geometry";
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=geometry`;
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
 
-    // Cleanup old script if component unmounts
     return () => {
       document.body.removeChild(script);
     };
@@ -21,10 +24,8 @@ export default function Home() {
     <main style={{ padding: "20px" }}>
       <h2>Map and Street View with Distance</h2>
       <p>
-        A random location in College Station is chosen at startup (used
-        internally).<br />
-        Click the map to drop a pin and see the distance from that hidden
-        location.
+        A random location in College Station is chosen at startup (used internally).<br />
+        Click the map to drop a pin and see the distance from that hidden location.
       </p>
 
       <div
@@ -50,9 +51,8 @@ export default function Home() {
         ></div>
       </div>
 
-      {/* Load your external script */}
+      {/* Load your external map logic */}
       <script src="/script.js"></script>
     </main>
   );
 }
-

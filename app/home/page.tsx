@@ -21,16 +21,15 @@ export default function Home() {
                     <li><a href="/login">Login</a></li>
                 </ul>
             </nav>
-            {/* Main Text */}
-            {/* Revellie Logo */}
+            {/* Revellie Image */}
             <div className="revellie-image">
                 <Image src="/revellie-removebg-preview.png"
                         width={200}             
                         height={200}            
-                        alt="Revellie Image"
+                        alt="Revellie"
                 />
             </div>
-            {/* Text */}
+            {/* Main Text */}
             <div className="header-text">
                 <p className="sono-regular">TAMU Guessr</p>
                 <h1 className="sono-regular">This weeks theme is <span>SKATING!</span></h1>
@@ -41,7 +40,6 @@ export default function Home() {
                 <Card title="Play" description="A match of 3 rounds around campus"/>
                 <Card title="Play" description="A match of 1 rounds around campus"/>
             </div>
-            {/* Actual Game */}
             {/* Game Description */}
             <div id="about" className="about-text">
                 <h2 className="sono-regular">About TAMU Guessr</h2>
