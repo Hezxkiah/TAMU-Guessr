@@ -5,25 +5,37 @@
     background-color: maroon;
     border-radius: 15px;
 
-    /* 1. Enable smooth transition for the hover effects */
-    transition: all 0.3s ease-in-out; 
-    
-    /* 2. Initial shadow (optional, but good for base look) */
+    transition: all 0.3s ease-in; 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
 .Card:hover {
-    /* 1. Lifting Effect: Move it up on the Z-axis (visually) and Y-axis (to lift) */
-    transform: translateY(-15px) scale(1.02);
-
-    border-color: white;
-
-    /* 2. Backdrop Shadow Effect: A larger, softer shadow */
-    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.25),
-                0 4px 15px rgba(0, 0, 0, 0.1); /* Keep a subtle top shadow */
-    
-    /* 3. Optional: Make the cursor a pointer to indicate interactivity */
+    transform: translateY(-15px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2); 
     cursor: pointer;
+}
+
+.ImageCard {
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    transition: all 0.35s ease-in;
+}
+
+
+.ObjectCover1 {
+    transform: translateY(14px) translateX(15px);
+}
+.ObjectCover2 {
+    transform: translateY(4px) translateX(-15px);;
+}
+
+.Card:hover .ObjectCover1 {
+    transform: translateY(-20px) translateX(15px) rotate(5deg);
+}
+
+.Card:hover .ObjectCover2 {
+    transform: translateY(-20px) translateX(-15px) rotate(-15deg);
 }
 
 /* .TextShadow {

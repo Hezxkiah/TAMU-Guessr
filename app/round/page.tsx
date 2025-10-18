@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import NavBar from "../components/NavBar";
 
 export default function Home() {
   useEffect(() => {
@@ -21,38 +22,41 @@ export default function Home() {
   }, []);
 
   return (
-    <main style={{ padding: "20px" }}>
-      <h2>Map and Street View with Distance</h2>
-      <p>
-        A random location in College Station is chosen at startup (used internally).<br />
-        Click the map to drop a pin and see the distance from that hidden location.
-      </p>
+    <>
+      <NavBar inLoginPage={true} />
+      <main style={{ padding: "20px" }}>
+        <h2>Map and Street View with Distance</h2>
+        <p>
+          A random location in College Station is chosen at startup (used internally).<br />
+          Click the map to drop a pin and see the distance from that hidden location.
+        </p>
 
-      <div
-        id="container"
-        style={{
-          display: "flex",
-          gap: "10px",
-        }}
-      >
         <div
-          id="map"
+          id="container"
           style={{
-            height: "500px",
-            width: "50%",
+            display: "flex",
+            gap: "10px",
           }}
-        ></div>
-        <div
-          id="street-view"
-          style={{
-            height: "500px",
-            width: "50%",
-          }}
-        ></div>
-      </div>
+        >
+          <div
+            id="map"
+            style={{
+              height: "500px",
+              width: "50%",
+            }}
+          ></div>
+          <div
+            id="street-view"
+            style={{
+              height: "500px",
+              width: "50%",
+            }}
+          ></div>
+        </div>
 
-      {/* Load your external map logic */}
-      <script src="/script.js"></script>
-    </main>
+        {/* Load your external map logic */}
+        <script src="/script.js"></script>
+      </main>
+    </>
   );
 }

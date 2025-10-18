@@ -35,9 +35,9 @@ export default function Home() {
             {/* Play Cards */}
             <a href="/round">
                 <div className={styles.Container}>
-                    <Card title="Play" description="A match of 5 rounds around campus"/>
-                    <Card title="Play" description="A match of 3 rounds around campus"/>
-                    <Card title="Play" description="A match of 1 rounds around campus"/>
+                    <Card title="Quick Round" description="A streetview game seen through the roads of campus!"/>
+                    <Card title="Challenge Round" description="Restricted to a static image for one second!"/>
+                    <Card title="Multiplayer" description="Play with friends through join codes, 5 rounds!"/>
                 </div>
             </a>
             

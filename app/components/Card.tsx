@@ -8,14 +8,30 @@ interface Props {
 }
 
 export default function Card({ title, description }: Props) {
+  // const onMouseOver = (this) => {
+  //   // const cardImages = document.querySelectorAll("figure.object-cover")
+
+  //   // cardImages.forEach((img) => {
+      
+  //   // }
+
+  //   console.log("hovered");
+  // }
+
   return (
     <div className={styles.Card + " relative"}>
-      <figure className="relative w-full h-64">
+      <figure id="image-holder" className="relative w-full h-64">
         <Image
           src="/zachary.jpg"
-          alt="Shoes"
+          alt="Building"
           fill
-          className={styles.Card + " object-cover"}
+          className={`${styles.ImageCard} ${styles.ObjectCover1} absolute`}
+        />
+        <Image
+          src="/academicBuilding.jpg"
+          alt="Building"
+          fill
+          className={`${styles.ImageCard} ${styles.ObjectCover2} absolute`}
         />
       </figure>
       <div className={"absolute card-body top-10"}>
