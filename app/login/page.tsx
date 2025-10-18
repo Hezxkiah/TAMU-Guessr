@@ -43,8 +43,6 @@ export default function Home() {
       setLoading(false);
     }
     
-    // Note: We set loading to false only on error, 
-    // because on success, the page will redirect anyway.
   };
 
   return (

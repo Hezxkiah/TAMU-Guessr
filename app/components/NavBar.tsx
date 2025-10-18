@@ -20,9 +20,13 @@ const NavBar = ({ withoutLogin }: Props) => {
         {/* Navigation */}
         <ul id="sidemenu" className = "sono-regular">
             <li><a href="#header"></a></li>
-            <li><a href="#about">About</a></li>
+            <li><a href="#about">Play</a></li>
             <li><a href="/login">Login</a></li>
         </ul>
+
+        <div className="title-text">
+          <p>Aggie Guessr</p>
+        </div>
     </nav>
   )
 }
