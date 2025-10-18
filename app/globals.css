@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "daisyui";
 
 :root {
   --background: #ffffff;
@@ -27,7 +28,7 @@
 
 .sono-regular {
   font-family: "Sono", monospace;
-  font-optical-sizing: auto;
+  /* font-optical-sizing: auto; */
   font-weight: 300; /* Regular weight */
   font-style: normal;
   font-variation-settings:
