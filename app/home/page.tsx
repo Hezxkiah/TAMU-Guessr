@@ -8,8 +8,8 @@ export default function Home() {
     <div id="header">
         <div className="contain">
             {/* Header */}
-            <NavBar withoutLogin={true} />
-            
+            <NavBar inLoginPage={false} />
+
             {/* Revellie Image */}
             <div className="revellie-image">
                 <Image src="/revellie-removebg-preview.png"
