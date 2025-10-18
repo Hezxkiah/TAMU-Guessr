@@ -224,3 +224,11 @@ button[type="submit"]:disabled {
   margin-bottom: 20px;
   font-size: 0.95rem;
 }
+
+/* Footer Styles */
+.footer {
+    text-align: center;
+    font-size: 20px;
+    background-color: white;
+    margin-top: 40px;
+}   

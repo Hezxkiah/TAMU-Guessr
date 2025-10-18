@@ -1,38 +1,48 @@
-// This file is now interactive, so we must add "use client"
+// This file is interactive, so we must add "use client"
 "use client";
 
 // Added 'useState' for form logic
 import { useState } from 'react';
 import Image from "next/image";
+import Link from 'next/link';
+
+// 1. Import the router to handle redirects
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  // --- State for the login form ---
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  // 2. Initialize the router
+  const router = useRouter();
 
-  // --- Form submission handler ---
+  // State for the login form
+  const [email, setEmail] = new useState('');
+  const [password, setPassword] = new useState('');
+  
+  // State for error messages
+  const [error, setError] = new useState('');
+  // State for loading
+  const [loading, setLoading] = new useState(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault(); // Stop the page from reloading
     setLoading(true);
     setError('');
 
-    // This is where you would send the data to your backend API
-    console.log("Login attempt:", { email, password });
+    // 3. Check the email and password
+    if (email === 'user@gmail.com' && password === '1234') {
+      // --- SUCCESS ---
+      console.log('Login Successful!');
+      
+      // 4. Redirect to the homepage
+      router.push('/home'); // This sends the user to your main page
 
-    // --- Example: Simulating a login check ---
-    // In a real app, you would 'await fetch(...)' here
-    setTimeout(() => {
-      if (password !== 'password123') {
-        setError('Invalid email or password.');
-      } else {
-        setError('');
-        console.log('Login Successful!');
-        // Redirect or save token here
-      }
+    } else {
+      // --- FAILURE ---
+      setError('Invalid email or password');
       setLoading(false);
-    }, 1000); // Simulate a 1-second network delay
+    }
+    
+    // Note: We set loading to false only on error, 
+    // because on success, the page will redirect anyway.
   };
 
   return (
@@ -40,31 +50,35 @@ export default function Home() {
         <div className="contain">
             {/* Header */}
             <nav className="sono-regular">
+                <Link href="/">
+                  <Image src="/texasA&MLogo.png"
+                          width={200}            
+                          height={200}           
+                          alt="Texas A&M Logo"
+                  />
+                </Link>
                 
-                {/* Logo (Unchanged from your original) */}
-                <Image src="/texasA&MLogo.png"
-                        width={200}            
-                        height={200}           
-                        alt="Texas A&M Logo"
-                />
-                
-                {/* Navigation (Unchanged from your original) */}
                 <ul id="sidemenu" className = "sono-regular">
                     <li><a href="#header"></a></li>
-                    <li><a href="/home">Home</a></li>
+                    <li><a href="/home  ">Home</a></li>
                 </ul>
             </nav>
             
-            {/* --- Login Form Structure Added Below --- */}
-            {/* I added id="login" so your nav link works */}
+            {/* --- Login Form --- */}
             <div id="login" className="login-form-wrapper">
               <h1 className="sono-regular">Login to Your Account</h1>
+              
               <form onSubmit={handleSubmit}>
+                
+                {/* Shows an error message if one exists */}
+                {error && <p className="error-message">{error}</p>}
+
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
                   <input
                     type="email"
                     id="email"
+                    name="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -75,21 +89,18 @@ export default function Home() {
                   <input
                     type="password"
                     id="password"
+                    name="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
                 </div>
 
-                {/* Shows an error message if one exists */}
-                {error && <p className="error-message">{error}</p>}
-
                 <button type="submit" disabled={loading} className="sono-regular">
                   {loading ? 'Logging in...' : 'Login'}
                 </button>
               </form>
             </div>
-            {/* --- End of Login Form --- */}
             
         </div>
     </div>
