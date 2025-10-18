@@ -35,8 +35,8 @@ export default function Card({ title, description }: Props) {
         />
       </figure>
       <div className={"absolute card-body top-10"}>
-        <h2 className="card-title sono-regular text-white z-10 text-[34px]">{ title }</h2>
-        <p className={styles.TextShadow + " sono-regular text-white z-10"}>{ description }</p>
+        <h2 className="card-title special-elite-regular text-white z-10 text-[34px]">{ title }</h2>
+        <p className={styles.TextShadow + " special-elite-regular text-white z-10"}>{ description }</p>
         {/* <div className="card-actions justify-end">
           <button className="btn btn-primary">Buy Now</button>
         </div> */}

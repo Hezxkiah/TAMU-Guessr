@@ -30,7 +30,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&family=Sono:wght@200..800&family=Special+Elite&display=swap" rel="stylesheet" />
       </head>
       <body
-        className="sono-regular"
+        className="special-elite-regular"
       >
         {children}
       </body>
