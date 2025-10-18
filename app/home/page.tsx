@@ -28,9 +28,9 @@ export default function Home() {
             
             {/* Revellie Image */}
             <div className="revellie-image">
-                <Image src="/revellie-removebg-preview.png"
-                        width={200}             
-                        height={200}            
+                <Image src="/rev_12thman.png"
+                        width={300}             
+                        height={300}            
                         alt="Revellie"
                 />
             </div>
