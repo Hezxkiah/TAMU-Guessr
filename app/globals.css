@@ -100,7 +100,7 @@ nav ul li a::after{
     content: '';
     width: 0;
     height: 3px;
-    background: white;
+    background: #500000;
     position: absolute;
     left: 0;
     bottom: -6px;
@@ -128,4 +128,15 @@ nav ul li a:hover::after{
 
 .header-text p{
     font-size: 45px;
+}
+
+.about-text{
+    width: 60%;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.about-text h2{
+    font-size: 30px;
+    margin-bottom: 20px;
 }
