@@ -18,9 +18,17 @@ export default function Home() {
                 <ul id="sidemenu" className = "sono-regular">
                     <li><a href="#header"></a></li>
                     <li><a href="#about">About</a></li>
-                    <li><a href="#login">Login</a></li>
+                    <li><a href="/login">Login</a></li>
                 </ul>
             </nav>
+            {/* Revellie Image */}
+            <div className="revellie-image">
+                <Image src="/revellie-removebg-preview.png"
+                        width={200}             
+                        height={200}            
+                        alt="Revellie"
+                />
+            </div>
             {/* Main Text */}
             <div className="header-text">
                 <p className="sono-regular">TAMU Guessr</p>
