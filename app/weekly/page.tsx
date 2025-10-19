@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-import styles from "./Page.module.css";
+import styles from "./Weekly.module.css";
 
 // **********************************************
 // * START OF EMBEDDED GAME LOGIC
