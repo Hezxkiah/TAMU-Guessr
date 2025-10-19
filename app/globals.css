@@ -35,11 +35,11 @@
 }
 
 
-*{
+/* *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
+} */
 
 
 body{
@@ -133,10 +133,14 @@ nav ul li a:hover::after{
 }
 
 .about-text{
-    width: 60%;
+    width: 90%;
     margin: 50px auto;
     text-align: center;
     padding-bottom: 30x;
+    background-color: #500000;
+    color: white;
+    border-radius: 15px;
+    padding: 30px;
 }
 
 .about-text h2{

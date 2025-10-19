@@ -12,6 +12,7 @@
 .Card:hover {
     transform: translateY(-15px);
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2); 
+    background-color: #7e0202;
     cursor: pointer;
 }
 
@@ -24,20 +25,21 @@
 
 
 .ObjectCover1 {
-    transform: translateY(14px) translateX(15px);
+    transform: translateY(30px) translateX(15px);
 }
 .ObjectCover2 {
     transform: translateY(4px) translateX(-15px);;
 }
 
 .Card:hover .ObjectCover1 {
-    transform: translateY(-20px) translateX(15px) rotate(5deg);
+    transform: translateY(35px) translateX(25px) rotate(1deg);
 }
 
 .Card:hover .ObjectCover2 {
-    transform: translateY(-20px) translateX(-15px) rotate(-15deg);
+    transform: translateY(-10px) translateX(-25px) rotate(-5deg);
 }
 
-/* .TextShadow {
-     background-image: linear-gradient(to right, #833ab4, #fd1d1d,#fcb045);
-} */
+.TextShadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+     /* background-image: linear-gradient(to right, #833ab4, #fd1d1d,#fcb045); */
+}
