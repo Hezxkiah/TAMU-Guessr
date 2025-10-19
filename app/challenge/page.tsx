@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -69,10 +70,9 @@ const loc_list = [
   anth,
 ];
 
-
-
 type LocationType = typeof zach;
 let currentLocation: LocationType;
+let previousLocation: LocationType | null = null; // <-- NEW: Stores the last location to prevent immediate repetition
 
 // Functions linked to React state setters
 let updateGameMessage: (message: string) => void;
@@ -87,7 +87,7 @@ function stopTimer() {
     }
 }
 
-/** Starts the 30-second timer and handles time-out logic. */
+/** Starts the 25-second timer and handles time-out logic. */
 function startTimer() {
     stopTimer(); // Clear any existing timer
     let time = INITIAL_TIME;
@@ -104,7 +104,7 @@ function startTimer() {
     }, 1000);
 }
 
-/** Logic executed when the 30 seconds run out. */
+/** Logic executed when the time runs out. */
 function handleTimeExpired() {
     const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
     
@@ -125,211 +125,220 @@ function handleTimeExpired() {
     clickedLocation = null;
 
     // We do NOT calculate distance or add score (implicitly 0)
-    // The next round logic will be triggered by handleNextRound click.
 }
 
 
 function pickRandomLocation() {
-  currentLocation = loc_list[Math.floor(Math.random() * loc_list.length)];
-  console.log(`🎯 Target for round ${round}: ${currentLocation.name}`);
-  // Update message for challenge mode
-  updateGameMessage(`Round ${round}/${maxRounds} (CHALLENGE): Guess the location!`);
-  updateRoundInfo('');
-  
-  startTimer(); // <<< START TIMER HERE
+    let newLocation: LocationType;
+    
+    // FIX: Logic to prevent the same location from being picked twice in a row
+    do {
+        newLocation = loc_list[Math.floor(Math.random() * loc_list.length)];
+    } while (newLocation === previousLocation && loc_list.length > 1);
+
+    currentLocation = newLocation;
+    previousLocation = newLocation; // Store the current location for the next check
+
+    console.log(`🎯 Target for round ${round}: ${currentLocation.name}`);
+    // Update message for challenge mode
+    updateGameMessage(`Round ${round}/${maxRounds} (CHALLENGE): Guess the location!`);
+    updateRoundInfo('');
+    
+    startTimer(); // <<< START TIMER HERE
 }
 
 function handleConfirmGuess() {
-  if (!clickedLocation) {
-    updateGameMessage("Click on the map to place your guess first!");
-    return;
-  }
-  
-  stopTimer(); // <<< STOP TIMER ON GUESS
+  if (!clickedLocation) {
+    updateGameMessage("Click on the map to place your guess first!");
+    return;
+  }
+  
+  stopTimer(); // <<< STOP TIMER ON GUESS
 
-  const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
-  confirmBtn.disabled = true;
+  const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
+  confirmBtn.disabled = true;
 
-  if (actualMarker) {
-    actualMarker.setMap(null);
-  }
-  actualMarker = new google.maps.Marker({
-    position: { lat: currentLocation.lat, lng: currentLocation.lng },
-    map: map,
-    icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 10,
-      fillColor: "red",
-      fillOpacity: 0.8,
-      strokeColor: "white",
-      strokeWeight: 2,
-    },
-    title: "Actual Location",
-  });
+  if (actualMarker) {
+    actualMarker.setMap(null);
+  }
+  actualMarker = new google.maps.Marker({
+    position: { lat: currentLocation.lat, lng: currentLocation.lng },
+    map: map,
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 10,
+      fillColor: "red",
+      fillOpacity: 0.8,
+      strokeColor: "white",
+      strokeWeight: 2,
+    },
+    title: "Actual Location",
+  });
 
-  const bounds = new google.maps.LatLngBounds();
-  bounds.extend(clickedLocation);
-  bounds.extend(actualMarker.getPosition()!);
-  map.fitBounds(bounds);
+  const bounds = new google.maps.LatLngBounds();
+  bounds.extend(clickedLocation);
+  bounds.extend(actualMarker.getPosition()!);
+  map.fitBounds(bounds);
 
-  const targetPoint = new google.maps.LatLng(
-    currentLocation.lat,
-    currentLocation.lng
-  );
-  const distanceMeters = google.maps.geometry.spherical.computeDistanceBetween(
-    clickedLocation,
-    targetPoint
-  );
-  const distanceKm = distanceMeters / 1000;
-  const roundScore = Math.round(1200 * Math.exp(-1.8 * distanceKm));
-  totalScore += roundScore;
+  const targetPoint = new google.maps.LatLng(
+    currentLocation.lat,
+    currentLocation.lng
+  );
+  const distanceMeters = google.maps.geometry.spherical.computeDistanceBetween(
+    clickedLocation,
+    targetPoint
+  );
+  const distanceKm = distanceMeters / 1000;
+  const roundScore = Math.round(1200 * Math.exp(-1.8 * distanceKm));
+  totalScore += roundScore;
 
-  updateGameMessage(`🏁 Round ${round} Complete!`);
-  updateRoundInfo(
-    `Target: ${currentLocation.name}\n` +
-      `Distance: ${distanceKm.toFixed(2)} km\n` +
-      `Round Score: ${roundScore}\n` +
-      `Total Score: ${totalScore}`
-  );
+  updateGameMessage(`🏁 Round ${round} Complete!`);
+  updateRoundInfo(
+    `Target: ${currentLocation.name}\n` +
+      `Distance: ${distanceKm.toFixed(2)} km\n` +
+      `Round Score: ${roundScore}\n` +
+      `Total Score: ${totalScore}`
+  );
 
-  confirmBtn.textContent = "➡️ Next Round";
-  confirmBtn.disabled = false;
+  confirmBtn.textContent = "➡️ Next Round";
+  confirmBtn.disabled = false;
 
-  confirmBtn.removeEventListener("click", handleConfirmGuess);
-  confirmBtn.addEventListener("click", handleNextRound);
+  confirmBtn.removeEventListener("click", handleConfirmGuess);
+  confirmBtn.addEventListener("click", handleNextRound);
 }
 
 function handlePlayAgain() {
-    stopTimer(); // Ensure timer is stopped
+    stopTimer(); // Ensure timer is stopped
 
-    // Reset all game state variables
-    round = 1;
-    totalScore = 0;
-    clickedLocation = null;
-    
-    // Reset timer display
-    updateTimeLeft(INITIAL_TIME);
+    // Reset all game state variables
+    round = 1;
+    totalScore = 0;
+    clickedLocation = null;
+    previousLocation = null; // <-- IMPORTANT: Reset previous location for new game
+    
+    // Reset timer display
+    updateTimeLeft(INITIAL_TIME);
 
-    // Clear map markers
-    if (marker) { marker.setMap(null); marker = null; }
-    if (actualMarker) { actualMarker.setMap(null); actualMarker = null; }
+    // Clear map markers
+    if (marker) { marker.setMap(null); marker = null; }
+    if (actualMarker) { actualMarker.setMap(null); actualMarker = null; }
 
-    // Reset the map and button appearance/event
-    const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
-    confirmBtn.textContent = "✅ Confirm Guess";
-    confirmBtn.disabled = true;
-    confirmBtn.removeEventListener("click", handlePlayAgain);
-    confirmBtn.addEventListener("click", handleConfirmGuess);
+    // Reset the map and button appearance/event
+    const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
+    confirmBtn.textContent = "✅ Confirm Guess";
+    confirmBtn.disabled = true;
+    confirmBtn.removeEventListener("click", handlePlayAgain);
+    confirmBtn.addEventListener("click", handleConfirmGuess);
 
-    initMapGame(); // Re-initialize the game state
+    initMapGame(); // Re-initialize the game state
 }
 
 function handleNextRound() {
-  round++;
-  const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
+  round++;
+  const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
 
-  if (round > maxRounds) {
-    // GAME OVER LOGIC
-    updateGameMessage(`🎉 Game Over! Final Score: ${totalScore} / ${maxRounds * 1200}`);
-    updateRoundInfo(`Total rounds played: ${maxRounds}`);
+  if (round > maxRounds) {
+    // GAME OVER LOGIC
+    updateGameMessage(`🎉 Game Over! Final Score: ${totalScore} / ${maxRounds * 1200}`);
+    updateRoundInfo(`Total rounds played: ${maxRounds}`);
 
-    confirmBtn.textContent = "🔄 Play Again?";
-    confirmBtn.disabled = false;
+    confirmBtn.textContent = "🔄 Play Again?";
+    confirmBtn.disabled = false;
 
-    // Change event listener to Play Again handler
-    confirmBtn.removeEventListener("click", handleNextRound);
-    confirmBtn.addEventListener("click", handlePlayAgain);
-    return;
-  }
+    // Change event listener to Play Again handler
+    confirmBtn.removeEventListener("click", handleNextRound);
+    confirmBtn.addEventListener("click", handlePlayAgain);
+    return;
+  }
 
-  // Clear map markers and location for new round
-  if (marker) { marker.setMap(null); marker = null; }
-  if (actualMarker) { actualMarker.setMap(null); actualMarker = null; }
-  clickedLocation = null;
-  
-  // Set up new round
-  pickRandomLocation();
+  // Clear map markers and location for new round
+  if (marker) { marker.setMap(null); marker = null; }
+  if (actualMarker) { actualMarker.setMap(null); actualMarker = null; }
+  clickedLocation = null;
+  
+  // Set up new round
+  pickRandomLocation();
 
-  panorama.setPosition({
-    lat: currentLocation.lat,
-    lng: currentLocation.lng,
-  });
-  
-  // Re-apply no-move settings (just in case)
-  panorama.setOptions({
-    addressControl: false,
-    motionTrackingControl: false,
-    linksControl: false,
-    clickToGo: false, // Ensure this is reapplied
-    panControl: true, // Allow looking around
-    zoomControl: false,
-    fullscreenControl: false,
-    visible: true,
-  });
+  panorama.setPosition({
+    lat: currentLocation.lat,
+    lng: currentLocation.lng,
+  });
+  
+  // Re-apply no-move settings (just in case)
+  panorama.setOptions({
+    addressControl: false,
+    motionTrackingControl: false,
+    linksControl: false,
+    clickToGo: false, // Ensure this is reapplied
+    panControl: true, // Allow looking around
+    zoomControl: false,
+    fullscreenControl: false,
+    visible: true,
+  });
 
-  map.setCenter({ lat: 30.627977, lng: -96.334407 });
-  map.setZoom(14);
+  map.setCenter({ lat: 30.627977, lng: -96.334407 });
+  map.setZoom(14);
 
-  confirmBtn.textContent = "✅ Confirm Guess";
-  confirmBtn.disabled = true;
+  confirmBtn.textContent = "✅ Confirm Guess";
+  confirmBtn.disabled = true;
 
-  confirmBtn.removeEventListener("click", handleNextRound);
-  confirmBtn.addEventListener("click", handleConfirmGuess);
+  confirmBtn.removeEventListener("click", handleNextRound);
+  confirmBtn.addEventListener("click", handleConfirmGuess);
 }
 
 function initMapGame() {
-  const collegeStation = { lat: 30.627977, lng: -96.334407 };
+  const collegeStation = { lat: 30.627977, lng: -96.334407 };
 
-  // This calls pickRandomLocation, which starts the timer for the first round
-  pickRandomLocation();
+  // This calls pickRandomLocation, which starts the timer for the first round
+  pickRandomLocation();
 
-  map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
-    center: collegeStation,
-    zoom: 14,
-  });
+  map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
+    center: collegeStation,
+    zoom: 14,
+  });
 
-  panorama = new google.maps.StreetViewPanorama(
-    document.getElementById("street-view") as HTMLElement,
-    {
-      position: { lat: currentLocation.lat, lng: currentLocation.lng },
-      pov: { heading: 165, pitch: 0 },
-      zoom: 1,
-      // Disable movement controls (links, motion, zoom, fullscreen, and click-to-go)
-      addressControl: false,
-      motionTrackingControl: false,
-      linksControl: false, // Disables the arrows for moving
-      clickToGo: false,    // Disables clicking to move forward in Street View
-      panControl: true,    // Allow looking around (panning)
-      zoomControl: false,
-      fullscreenControl: false,
-    }
-  );
+  panorama = new google.maps.StreetViewPanorama(
+    document.getElementById("street-view") as HTMLElement,
+    {
+      position: { lat: currentLocation.lat, lng: currentLocation.lng },
+      pov: { heading: 165, pitch: 0 },
+      zoom: 1,
+      // Disable movement controls (links, motion, zoom, fullscreen, and click-to-go)
+      addressControl: false,
+      motionTrackingControl: false,
+      linksControl: false, // Disables the arrows for moving
+      clickToGo: false,    // Disables clicking to move forward in Street View
+      panControl: true,    // Allow looking around (panning)
+      zoomControl: false,
+      fullscreenControl: false,
+    }
+  );
 
-  map.addListener("click", (event: google.maps.MapMouseEvent) => {
-    clickedLocation = event.latLng;
+  map.addListener("click", (event: google.maps.MapMouseEvent) => {
+    clickedLocation = event.latLng;
 
-    if (marker) {
-      marker.setPosition(clickedLocation);
-    } else {
-      marker = new google.maps.Marker({
-        position: clickedLocation!,
-        map: map,
-        draggable: true,
-      });
+    if (marker) {
+      marker.setPosition(clickedLocation);
+    } else {
+      marker = new google.maps.Marker({
+        position: clickedLocation!,
+        map: map,
+        draggable: true,
+      });
 
-      marker.addListener("dragend", (e: google.maps.MapMouseEvent) => {
-        clickedLocation = e.latLng;
-      });
-    }
+      marker.addListener("dragend", (e: google.maps.MapMouseEvent) => {
+        clickedLocation = e.latLng;
+      });
+    }
 
-    (document.getElementById("confirmBtn") as HTMLButtonElement).disabled = false;
-  });
+    (document.getElementById("confirmBtn") as HTMLButtonElement).disabled = false;
+  });
 
-  const confirmBtn = document.getElementById("confirmBtn");
-  if (confirmBtn) {
-    confirmBtn.removeEventListener("click", handleConfirmGuess);
-    confirmBtn.addEventListener("click", handleConfirmGuess);
-  }
+  const confirmBtn = document.getElementById("confirmBtn");
+  if (confirmBtn) {
+    confirmBtn.removeEventListener("click", handleConfirmGuess);
+    confirmBtn.addEventListener("click", handleConfirmGuess);
+  }
 }
 // * END OF EMBEDDED GAME LOGIC
 // **********************************************
@@ -337,209 +346,209 @@ function initMapGame() {
 // --- REACT COMPONENT ---
 
 /**
- * Renders the Challenge Game Component.
- * NOTE: For Next.js App Router, ensure this file is named `ChallengeGame.tsx`
- * and is imported by `app/challenge/page.tsx`.
- */
+ * Renders the Challenge Game Component.
+ * NOTE: For Next.js App Router, ensure this file is named `ChallengeGame.tsx`
+ * and is imported by `app/challenge/page.tsx`.
+ */
 export default function ChallengeGame() {
-  const scriptLoaded = useRef(false);
-  // Update initial message for challenge mode
-  const [gameMessage, setGameMessage] = useState("Loading Challenge game...");
-  const [roundInfo, setRoundInfo] = useState("");
-  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME); // New state for timer
-    
-  // Initialize Next.js router
-  const router = useRouter();
+  const scriptLoaded = useRef(false);
+  // Update initial message for challenge mode
+  const [gameMessage, setGameMessage] = useState("Loading Challenge game...");
+  const [roundInfo, setRoundInfo] = useState("");
+  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME); // New state for timer
+    
+  // Initialize Next.js router
+  const router = useRouter();
 
-  // Assign the state setters to the global functions for use in game logic
-  useEffect(() => {
-    updateGameMessage = setGameMessage;
-    updateRoundInfo = setRoundInfo;
-    updateTimeLeft = setTimeLeft; // New assignment
-    
-    // Cleanup function: important to stop the timer if the component unmounts!
-    return () => {
-        stopTimer();
-    }
-  }, []);
+  // Assign the state setters to the global functions for use in game logic
+  useEffect(() => {
+    updateGameMessage = setGameMessage;
+    updateRoundInfo = setRoundInfo;
+    updateTimeLeft = setTimeLeft; // New assignment
+    
+    // Cleanup function: important to stop the timer if the component unmounts!
+    return () => {
+        stopTimer();
+    }
+  }, []);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      (window as any).initMapGame = initMapGame;
-    }
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).initMapGame = initMapGame;
+    }
 
-    // IMPORTANT: Ensure NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is set in your .env.local file
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    // IMPORTANT: Ensure NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is set in your .env.local file
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-    if (!scriptLoaded.current && apiKey && typeof window !== 'undefined' && !(window as any).google) {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMapGame&libraries=geometry`;
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-      scriptLoaded.current = true;
-    } else if ((window as any).google && (window as any).initMapGame) {
-      (window as any).initMapGame();
-    }
-
-
-    return () => {
-      if (typeof window !== 'undefined') {
-        delete (window as any).initMapGame;
-      }
-    };
-  }, []);
-
-  // Define the click handler for the Home button
-  const handleGoHome = () => {
-    stopTimer(); // Crucial: Stop the game timer before navigating away
-    router.push('/'); // Navigate to the root path (which typically renders home/page.tsx)
-  };
-
-  // 🚨 Dynamic panic style: Fades from yellow to red, and gets bolder/larger under 10 seconds.
-  const timerStyle = {
-    fontWeight: 'bold',
-    marginBottom: '5px',
-    fontSize: timeLeft <= 10 && roundTimer !== null ? '20px' : '16px', // Gets bigger
-    color: roundTimer === null
-      ? 'yellow' // Paused/Done color
-      : timeLeft <= 10
-      ? '#ff4444' // Intense Red (Panic Time)
-      : timeLeft <= 17 // Yellow between 25 and 17 seconds
-      ? '#ffcc00' 
-      : 'yellow', 
-    transition: 'all 0.5s ease-in-out', // Smooth transition for the color/size change
-  };
+    if (!scriptLoaded.current && apiKey && typeof window !== 'undefined' && !(window as any).google) {
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMapGame&libraries=geometry`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+      scriptLoaded.current = true;
+    } else if ((window as any).google && (window as any).initMapGame) {
+      (window as any).initMapGame();
+    }
 
 
-  return (
-    <main style={{ height: "100vh", margin: 0, padding: 0, overflow: "hidden", position: "relative" }}>
-      {/* Game Message Display Box */}
-      <div
-        style={{
-          position: "absolute",
-          top: 10,
-          left: 10,
-          zIndex: 10,
-          backgroundColor: "rgba(0,0,0,0.6)",
-          color: "white",
-          padding: "10px 15px",
-          borderRadius: 8,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
-          minWidth: 250,
-          maxWidth: 400,
-          fontSize: 16,
-          lineHeight: 1.4,
-        }}
-      >
-        {/* Update title for Challenge Mode */}
-        <h2 style={{ margin: "0 0 5px 0", fontSize: 18, color: "#500000" }}>TAMU Guessr - Challenge Mode 🚀</h2>
-        
-        {/* Timer Display */}
-        {/* 🚨 APPLY THE NEW, DYNAMIC PANIC STYLE */}
-        <div style={timerStyle}>
-            {roundTimer !== null && `⏳ TIME LEFT: ${timeLeft}s`}
-            {roundTimer === null && 'Game Paused/Complete'}
-        </div>
+    return () => {
+      if (typeof window !== 'undefined') {
+        delete (window as any).initMapGame;
+      }
+    };
+  }, []);
 
-        <p style={{ margin: "0", whiteSpace: "pre-wrap" }}>
-          {gameMessage}
-          {roundInfo && (
-            <>
-              <br />
-              <strong style={{color: '#a5d6a7'}}>-- Round Details --</strong>
-              <br />
-              {roundInfo}
-            </>
-          )}
-        </p>
-      </div>
+  // Define the click handler for the Home button
+  const handleGoHome = () => {
+    stopTimer(); // Crucial: Stop the game timer before navigating away
+    router.push('/'); // Navigate to the root path (which typically renders home/page.tsx)
+  };
 
-      {/* Street View Container */}
-      <div
-        id="street-view"
-        style={{ height: "100%", width: "100%", position: "relative" }}
-      >
-        {/* Map Container (Mini-Map) */}
-        <div
-          className={styles.Map}
-          id="map"
-          style={{
-            position: "absolute",
-            bottom: 20,
-            right: 20,
-            //height: 250, // Removed for adaptive sizing
-            //width: 350,  // Removed for adaptive sizing
-            border: "2px solid white",
-            borderRadius: 8,
-            boxShadow: "0 0 10px rgba(0,0,0,0.7)",
-            zIndex: 15,
-            backgroundColor: "#eee",
-          }}
-        ></div>
-      </div>
-    
-      {/* HOME BUTTON */}
-      <button
-        onClick={handleGoHome} // Use the new handler
-        style={{
-          position: "absolute",
-          bottom: 80, // Positioned above the Confirm Guess button
-          left: 20,
-          zIndex: 15,
-          padding: "12px 24px",
-          fontSize: 16,
-          borderRadius: 6,
-          border: "none",
-          backgroundColor: "#500000", // Texas A&M Maroon
-          color: "white",
-          cursor: "pointer",
-          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-          userSelect: "none",
-          transition: "background-color 0.3s",
-        }}
-        onMouseOver={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#6a0000";
-        }}
-        onMouseOut={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#500000";
-        }}
-      >
-        🏠 Back to Home
-      </button>
+  // 🚨 Dynamic panic style: Fades from yellow to red, and gets bolder/larger under 10 seconds.
+  const timerStyle = {
+    fontWeight: 'bold',
+    marginBottom: '5px',
+    fontSize: timeLeft <= 10 && roundTimer !== null ? '20px' : '16px', // Gets bigger
+    color: roundTimer === null
+      ? 'yellow' // Paused/Done color
+      : timeLeft <= 10
+      ? '#ff4444' // Intense Red (Panic Time)
+      : timeLeft <= 17 // Yellow between 25 and 17 seconds
+      ? '#ffcc00' 
+      : 'yellow', 
+    transition: 'all 0.5s ease-in-out', // Smooth transition for the color/size change
+  };
 
 
-      {/* Confirm Button */}
-      <button
-        id="confirmBtn"
-        disabled
-        style={{
-          position: "absolute",
-          bottom: 20,
-          left: 20,
-          zIndex: 15,
-          padding: "12px 24px",
-          fontSize: 16,
-          borderRadius: 6,
-          border: "none",
-          backgroundColor: "#4caf50",
-          color: "white",
-          cursor: "pointer",
-          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-          userSelect: "none",
-          transition: "background-color 0.3s",
-        }}
-        onMouseOver={(e) => {
-          if (!(e.currentTarget as HTMLButtonElement).disabled) {
-            (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#45a049";
-          }
-        }}
-        onMouseOut={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#4caf50";
-        }}
-      >
-        ✅ Confirm Guess
-      </button>
-    </main>
-  );
+  return (
+    <main style={{ height: "100vh", margin: 0, padding: 0, overflow: "hidden", position: "relative" }}>
+      {/* Game Message Display Box */}
+      <div
+        style={{
+          position: "absolute",
+          top: 10,
+          left: 10,
+          zIndex: 10,
+          backgroundColor: "rgba(0,0,0,0.6)",
+          color: "white",
+          padding: "10px 15px",
+          borderRadius: 8,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
+          minWidth: 250,
+          maxWidth: 400,
+          fontSize: 16,
+          lineHeight: 1.4,
+        }}
+      >
+        {/* Update title for Challenge Mode */}
+        <h2 style={{ margin: "0 0 5px 0", fontSize: 18, color: "#500000" }}>TAMU Guessr - Challenge Mode 🚀</h2>
+        
+        {/* Timer Display */}
+        {/* 🚨 APPLY THE NEW, DYNAMIC PANIC STYLE */}
+        <div style={timerStyle}>
+            {roundTimer !== null && `⏳ TIME LEFT: ${timeLeft}s`}
+            {roundTimer === null && 'Game Paused/Complete'}
+        </div>
+
+        <p style={{ margin: "0", whiteSpace: "pre-wrap" }}>
+          {gameMessage}
+          {roundInfo && (
+            <>
+              <br />
+              <strong style={{color: '#a5d6a7'}}>-- Round Details --</strong>
+              <br />
+              {roundInfo}
+            </>
+          )}
+        </p>
+      </div>
+
+      {/* Street View Container */}
+      <div
+        id="street-view"
+        style={{ height: "100%", width: "100%", position: "relative" }}
+      >
+        {/* Map Container (Mini-Map) */}
+        <div
+          className={styles.Map}
+          id="map"
+          style={{
+            position: "absolute",
+            bottom: 20,
+            right: 20,
+            //height: 250, // Removed for adaptive sizing
+            //width: 350,  // Removed for adaptive sizing
+            border: "2px solid white",
+            borderRadius: 8,
+            boxShadow: "0 0 10px rgba(0,0,0,0.7)",
+            zIndex: 15,
+            backgroundColor: "#eee",
+          }}
+        ></div>
+      </div>
+    
+      {/* HOME BUTTON */}
+      <button
+        onClick={handleGoHome} // Use the new handler
+        style={{
+          position: "absolute",
+          bottom: 80, // Positioned above the Confirm Guess button
+          left: 20,
+          zIndex: 15,
+          padding: "12px 24px",
+          fontSize: 16,
+          borderRadius: 6,
+          border: "none",
+          backgroundColor: "#500000", // Texas A&M Maroon
+          color: "white",
+          cursor: "pointer",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+          userSelect: "none",
+          transition: "background-color 0.3s",
+        }}
+        onMouseOver={(e) => {
+          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#6a0000";
+        }}
+        onMouseOut={(e) => {
+          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#500000";
+        }}
+      >
+        🏠 Back to Home
+      </button>
+
+
+      {/* Confirm Button */}
+      <button
+        id="confirmBtn"
+        disabled
+        style={{
+          position: "absolute",
+          bottom: 20,
+          left: 20,
+          zIndex: 15,
+          padding: "12px 24px",
+          fontSize: 16,
+          borderRadius: 6,
+          border: "none",
+          backgroundColor: "#4caf50",
+          color: "white",
+          cursor: "pointer",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+          userSelect: "none",
+          transition: "background-color 0.3s",
+        }}
+        onMouseOver={(e) => {
+          if (!(e.currentTarget as HTMLButtonElement).disabled) {
+            (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#45a049";
+          }
+        }}
+        onMouseOut={(e) => {
+          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#4caf50";
+        }}
+      >
+        ✅ Confirm Guess
+      </button>
+    </main>
+  );
 }

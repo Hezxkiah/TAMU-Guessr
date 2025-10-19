@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation"; // Added missing import for useRouter
+import { useRouter } from "next/navigation";
 
 import styles from "./Weekly.module.css";
 
@@ -28,26 +28,35 @@ const reed = {name: "Reed Arena", lat:30.605801, lng:-96.345115};
 const centree = {name: "Century Tree", lat:30.615927, lng:-96.341484};
 
 const loc_list = [
-  kyle,
-  twelveman,
-  quad,
-  pond,
-  reed,
-  centree
+  kyle,
+  twelveman,
+  quad,
+  pond,
+  reed,
+  centree
 ];
 
-// FIX: Changed LocationType from the undefined 'zach' to the defined 'kyle'
 type LocationType = typeof kyle; 
 let currentLocation: LocationType;
+let previousLocation: LocationType | null = null; // Stores the last location to prevent immediate repetition
 
 let updateGameMessage: (message: string) => void;
 let updateRoundInfo: (info: string) => void;
 
 function pickRandomLocation() {
-  currentLocation = loc_list[Math.floor(Math.random() * loc_list.length)];
-  console.log(`🎯 Target for round ${round}: ${currentLocation.name}`);
-  updateGameMessage(`Round ${round}/${maxRounds}: Guess the location!`);
-  updateRoundInfo('');
+    let newLocation: LocationType;
+    
+    // Logic to prevent the same location from being picked twice in a row
+    do {
+        newLocation = loc_list[Math.floor(Math.random() * loc_list.length)];
+    } while (newLocation === previousLocation && loc_list.length > 1);
+
+    currentLocation = newLocation;
+    previousLocation = newLocation; // Store the current location for the next check
+
+    console.log(`🎯 Target for round ${round}: ${currentLocation.name}`);
+    updateGameMessage(`Round ${round}/${maxRounds}: Guess the location!`);
+    updateRoundInfo('');
 }
 
 function handleConfirmGuess() {
@@ -116,6 +125,7 @@ function handlePlayAgain() {
     round = 1;
     totalScore = 0;
     clickedLocation = null;
+    previousLocation = null; // IMPORTANT: Reset previous location when starting a new game
     
     // Clear map markers
     if (marker) { marker.setMap(null); marker = null; }
@@ -348,8 +358,8 @@ export default function RoundsPage() {
           }}
         ></div>
       </div>
-      
-      {/* HOME BUTTON (Added for consistency with standard game mode) */}
+
+      {/* HOME BUTTON */}
       <button
         onClick={handleGoHome} 
         style={{
@@ -377,7 +387,7 @@ export default function RoundsPage() {
       >
         🏠 Back to Home
       </button>
-
+      
       {/* Confirm Button */}
       <button
         id="confirmBtn"

@@ -46,45 +46,54 @@ const reed = {name: "Reed Arena", lat:30.605801, lng:-96.345115};
 const centree = {name: "Century Tree", lat:30.615927, lng:-96.341484};
 
 const loc_list = [
-  zach,
-  msc,
-  clocktower,
-  simpson,
-  kyle,
-  kylehotel,
-  northgate,
-  physics,
-  drive,
-  haney,
-  park,
-  duncan,
-  ring,
-  rec,
-  whitecreek,
-  olsen,
-  wlc,
-  sbisa,
-  polo,
-  sign,
-  anth,
-  twelveman,
-  quad,
-  pond,
-  reed,
-  centree
+  zach,
+  msc,
+  clocktower,
+  simpson,
+  kyle,
+  kylehotel,
+  northgate,
+  physics,
+  drive,
+  haney,
+  park,
+  duncan,
+  rec,
+  whitecreek,
+  olsen,
+  wlc,
+  sbisa,
+  polo,
+  sign,
+  anth,
+  twelveman,
+  quad,
+  pond,
+  reed,
+  centree
 ];
 
 type LocationType = typeof zach;
 let currentLocation: LocationType;
+let previousLocation: LocationType | null = null; // <-- NEW: Stores the last location
 
 let updateGameMessage: (message: string) => void;
 let updateRoundInfo: (info: string) => void;
 
 function pickRandomLocation() {
-  currentLocation = loc_list[Math.floor(Math.random() * loc_list.length)];
-  console.log(`🎯 Target for round ${round}: ${currentLocation.name}`);
-  updateGameMessage(`Round ${round}/${maxRounds}: Guess the location!`);
-  updateRoundInfo('');
+    let newLocation: LocationType;
+    
+    // FIX: Logic to prevent the same location from being picked twice in a row
+    do {
+        newLocation = loc_list[Math.floor(Math.random() * loc_list.length)];
+    } while (newLocation === previousLocation && loc_list.length > 1);
+
+    currentLocation = newLocation;
+    previousLocation = newLocation; // Store the current location for the next check
+
+    console.log(`🎯 Target for round ${round}: ${currentLocation.name}`);
+    updateGameMessage(`Round ${round}/${maxRounds}: Guess the location!`);
+    updateRoundInfo('');
 }
 
 function handleConfirmGuess() {
@@ -153,6 +162,7 @@ function handlePlayAgain() {
     round = 1;
     totalScore = 0;
     clickedLocation = null;
+    previousLocation = null; // <-- IMPORTANT: Reset previous location for new game
     
     // Clear map markers
     if (marker) { marker.setMap(null); marker = null; }
@@ -189,7 +199,7 @@ function handleNextRound() {
 
   pickRandomLocation();
 
-  // CORRECTED: Load the panorama using the LatLngLiteral object format
+  // Load the panorama using the LatLngLiteral object format
   panorama.setPosition({ lat: currentLocation.lat, lng: currentLocation.lng });
 
   // Re-apply settings (Movement enabled)
@@ -238,13 +248,13 @@ function initMapGame() {
       position: { lat: currentLocation.lat, lng: currentLocation.lng },
       pov: { heading: 165, pitch: 0 },
       zoom: 1,
-      // Movement controls set to enabled
-      addressControl: false,
-      motionTrackingControl: false,
-      panControl: true,
-      zoomControl: false,
-      fullscreenControl: false,
-      visible: true,
+      // Movement controls set to enabled
+      addressControl: false,
+      motionTrackingControl: false,
+      panControl: true,
+      zoomControl: false,
+      fullscreenControl: false,
+      visible: true,
     }
   );
 
@@ -385,35 +395,35 @@ export default function RoundsPage() {
           }}
         ></div>
       </div>
-      
-      {/* HOME BUTTON */}
-      <button
-        onClick={handleGoHome} // Use the new handler
-        style={{
-          position: "absolute",
-          bottom: 80, // Positioned above the Confirm Guess button
-          left: 20,
-          zIndex: 15,
-          padding: "12px 24px",
-          fontSize: 16,
-          borderRadius: 6,
-          border: "none",
-          backgroundColor: "#500000", // Texas A&M Maroon
-          color: "white",
-          cursor: "pointer",
-          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-          userSelect: "none",
-          transition: "background-color 0.3s",
-        }}
-        onMouseOver={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#6a0000";
-        }}
-        onMouseOut={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#500000";
-        }}
-      >
-        🏠 Back to Home
-      </button>
+      
+      {/* HOME BUTTON */}
+      <button
+        onClick={handleGoHome} // Use the new handler
+        style={{
+          position: "absolute",
+          bottom: 80, // Positioned above the Confirm Guess button
+          left: 20,
+          zIndex: 15,
+          padding: "12px 24px",
+          fontSize: 16,
+          borderRadius: 6,
+          border: "none",
+          backgroundColor: "#500000", // Texas A&M Maroon
+          color: "white",
+          cursor: "pointer",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+          userSelect: "none",
+          transition: "background-color 0.3s",
+        }}
+        onMouseOver={(e) => {
+          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#6a0000";
+        }}
+        onMouseOut={(e) => {
+          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#500000";
+        }}
+      >
+        🏠 Back to Home
+      </button>
 
       {/* Confirm Button */}
       <button
