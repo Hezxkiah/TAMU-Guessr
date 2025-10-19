@@ -20,7 +20,8 @@ export default function Home() {
             </div>
             {/* Main Text */}
             <div className="header-text">
-                <h1 className="special-elite-regular">This weeks theme is <span>SKATING!</span></h1>
+                <h1 className="special-elite-regular">This weeks theme is..</h1>
+                <h1 className="special-elite-regular text-50" ><span>SKATING!</span></h1>
             </div>
              {/* Game Description */}
             <div id="about" className={"about-text"}>
@@ -36,9 +37,9 @@ export default function Home() {
             <div id = "cards">
                 <a href="/round">
                     <div className={styles.Container}>
-                        <Card title="Quick Round" description="A streetview game seen through the roads of campus!"/>
-                        <Card title="Challenge Round" description="Restricted to a static image for one second!"/>
-                        <Card title="Multiplayer" description="Play with friends through join codes, 5 rounds!"/>
+                        <Card title="Quick Round" description="A streetview game seen through the roads of campus!" images={["/academicBuilding.jpg", "/zachary.jpg"]} reverseZ={false}/>
+                        <Card title="Challenge Round" description="Restricted to a static image for one second!" images={["/msc.JPG", "/zachary.jpg"]} reverseZ={true}/>
+                        <Card title="Multiplayer" description="Play with friends through join codes, 5 rounds!" images={["/kyleField.jpg", "/rudderTower.jpg"]} reverseZ={false}/>
                     </div>
                 </a>
             </div>

@@ -20,7 +20,16 @@
     height: 100%;
     width: 100%;
     border-radius: 15px;
-    transition: all 0.35s ease-in;
+    filter: brightness(50%);
+    transition: all 0.35s ease-in-out;
+}
+
+.Card:hover .ImageCard {
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    filter: brightness(70%);
+    transition: all 0.35s ease-in-out;
 }
 
 
