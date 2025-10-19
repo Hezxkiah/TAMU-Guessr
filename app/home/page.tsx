@@ -20,11 +20,11 @@ export default function Home() {
             </div>
             {/* Main Text */}
             <div className="header-text">
-                <h1 className="special-elite-regular">This weeks theme is..</h1>
-                <h1 className="special-elite-regular text-50" ><span>SKATING!</span></h1>
+                <h1 className="special-elite-regular fade-in" style={{ animationDelay: '0.3s' }}>This weeks theme is..</h1>
+                <h1 className="special-elite-regular text-50 fade-in" style={{ animationDelay: '0.7s' }}><span>SKATING!</span></h1>
             </div>
              {/* Game Description */}
-            <div id="about" className={"about-text"}>
+            <div id="about" className="about-text fade-in" style={{ animationDelay: '1.3s' }}>
                 <h2 className="special-elite-regular">About TAMU Guessr</h2>
                 <div className="h-1 my-5 mx-6 bg-white"></div>
                 <p className="special-elite-regular">
