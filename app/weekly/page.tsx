@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
+import styles from "./Page.module.css";
+
 // **********************************************
 // * START OF EMBEDDED GAME LOGIC
 // **********************************************
@@ -295,12 +297,13 @@ export default function RoundsPage() {
         {/* Map Container (Mini-Map) */}
         <div
           id="map"
+          className={styles.Map}
           style={{
             position: "absolute",
             bottom: 20,
             right: 20,
-            height: 250,
-            width: 350,
+            // height: 250,
+            // width: 350,
             border: "2px solid white",
             borderRadius: 8,
             boxShadow: "0 0 10px rgba(0,0,0,0.7)",
