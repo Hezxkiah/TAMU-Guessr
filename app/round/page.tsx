@@ -17,7 +17,7 @@ let totalScore = 0;
 const maxRounds = 5;
 let clickedLocation: google.maps.LatLng | null = null;
 
-// --- DEDICATED LOCATION DEFINITION SECTION (No pano IDs) ---
+// --- DEDICATED LOCATION DEFINITION SECTION (ONLY lat/lng) ---
 const zach = { name: "Zachry Engineering Education Complex", lat: 30.620794, lng:-96.340940 };
 const msc = { name: "Memorial Student Center", lat: 30.61206, lng: -96.34273 };
 const clocktower = { name: "Albritton Bell Tower", lat: 30.61348, lng: -96.34488 };
@@ -37,8 +37,13 @@ const olsen = {name:"Olsen field", lat:30.605437, lng:-96.342304};
 const wlc = {name:"West campus library", lat:30.612745, lng:-96.350190}
 const sbisa = {name:"SBISA", lat:30.61643, lng:-96.34317};
 const polo = {name:"Polo", lat:30.6164292, lng:-96.3431690};
-const sign = {name:"Sign", lat:30.622730, lng:-96.328971}
-const anth = {name:"Anthropology building", lat:30.617818, lng:-96.339336}
+const sign = {name:"Sign", lat:30.622730, lng:-96.328971};
+const anth = {name:"Anthropology building", lat:30.617818, lng:-96.339336};
+const twelveman = {name:"12th man", lat:30.612058, lng:-96.339987};
+const quad = {name:"The quad", lat:30.614781, lng:-96.338047};
+const pond = {name:"Aggie Pond", lat:30.608953, lng:-96.337527};
+const reed = {name: "Reed Arena", lat:30.605801, lng:-96.345115};
+const centree = {name: "Century Tree", lat:30.615927, lng:-96.341484};
 
 const loc_list = [
   zach,
@@ -62,6 +67,11 @@ const loc_list = [
   polo,
   sign,
   anth,
+  twelveman,
+  quad,
+  pond,
+  reed,
+  centree
 ];
 
 
@@ -71,7 +81,6 @@ let currentLocation: LocationType;
 // Functions linked to React state setters
 let updateGameMessage: (message: string) => void;
 let updateRoundInfo: (info: string) => void;
-// updateTimeLeft is no longer needed
 
 function pickRandomLocation() {
   currentLocation = loc_list[Math.floor(Math.random() * loc_list.length)];
@@ -85,8 +94,6 @@ function handleConfirmGuess() {
     updateGameMessage("Click on the map to place your guess first!");
     return;
   }
-  
-  // Timer stop logic removed
 
   const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
   confirmBtn.disabled = true;
@@ -141,15 +148,11 @@ function handleConfirmGuess() {
 }
 
 function handlePlayAgain() {
-    // Timer stop logic removed
-
     // Reset all game state variables
     round = 1;
     totalScore = 0;
     clickedLocation = null;
     
-    // Timer display reset logic removed
-
     // Clear map markers
     if (marker) { marker.setMap(null); marker = null; }
     if (actualMarker) { actualMarker.setMap(null); actualMarker = null; }
@@ -190,11 +193,8 @@ function handleNextRound() {
   // Set up new round
   pickRandomLocation();
 
-  // Load the panorama for the new location (using position)
-  panorama.setPosition({
-    lat: currentLocation.lat,
-    lng: currentLocation.lng,
-  });
+  // 🚨 CORRECTED: Load the panorama using only the LatLngLiteral object
+  panorama.setPosition({ lat: currentLocation.lat, lng: currentLocation.lng });
 
   // Re-apply settings (movement enabled)
   panorama.setOptions({
@@ -284,7 +284,6 @@ export default function RoundsPage() {
   const scriptLoaded = useRef(false);
   const [gameMessage, setGameMessage] = useState("Loading game...");
   const [roundInfo, setRoundInfo] = useState("");
-  // Time state removed
     
   // Initialize Next.js router
   const router = useRouter();
@@ -293,9 +292,7 @@ export default function RoundsPage() {
   useEffect(() => {
     updateGameMessage = setGameMessage;
     updateRoundInfo = setRoundInfo;
-    // updateTimeLeft assignment removed
     
-    // Cleanup function: now empty as no timer cleanup is needed
     return () => {}
   }, []);
 
@@ -330,7 +327,6 @@ export default function RoundsPage() {
     router.push('/'); // Navigate to the root path
   };
   
-  // Timer style logic removed
   const infoBoxStyle = {
     position: "absolute" as "absolute",
     top: 10,
@@ -354,8 +350,6 @@ export default function RoundsPage() {
       <div style={infoBoxStyle}>
         <h2 style={{ margin: "0 0 5px 0", fontSize: 18, color: "#500000" }}>TAMU Guessr</h2>
         
-        {/* Timer Display REMOVED */}
-
         <p style={{ margin: "0", whiteSpace: "pre-wrap" }}>
           {gameMessage}
           {roundInfo && (

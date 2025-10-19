@@ -21,7 +21,7 @@ export default function Home() {
             {/* Main Text */}
             <div className="header-text">
                 <h1 className="special-elite-regular">This weeks theme is..</h1>
-                <h1 className="special-elite-regular text-50" ><span>SKATING!</span></h1>
+                <h1 className="special-elite-regular text-50" ><span>Famous TAMU spots!</span></h1>
             </div>
              {/* Game Description */}
             <div id="about" className={"about-text"}>
