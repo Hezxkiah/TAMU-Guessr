@@ -35,13 +35,11 @@ export default function Home() {
             </div >
             {/* Play Cards */}
             <div id = "cards">
-                <a href="/round">
                     <div className={styles.Container}>
-                        <Card title="Quick Round" description="A streetview game seen through the roads of campus!" images={["/academicBuilding.jpg", "/zachary.jpg"]} reverseZ={false}/>
-                        <Card title="Challenge Round" description="Restricted to a static image for one second!" images={["/msc.JPG", "/zachary.jpg"]} reverseZ={true}/>
-                        <Card title="Multiplayer" description="Play with friends through join codes, 5 rounds!" images={["/kyleField.jpg", "/rudderTower.jpg"]} reverseZ={false}/>
+                        <Card href="/round" title="Casual Round" description="A streetview game seen through the roads of campus!" images={["/academicBuilding.jpg", "/zachary.jpg"]} reverseZ={false}/>
+                        <Card href="/challenge" title="Challenge Round" description="Fixed position, 30 second time limit, higher stakes!" images={["/msc.JPG", "/zachary.jpg"]} reverseZ={true}/>
+                        <Card href="/weekly" title="Weekly themed game" description="Our Weekly theme! A fun new challenge every single week." images={["/kyleField.jpg", "/rudderTower.jpg"]} reverseZ={false}/>
                     </div>
-                </a>
             </div>
             {/* Linkedins */}
              <div className="contact">
@@ -64,7 +62,7 @@ export default function Home() {
                     </div>
                     {/* Andrew */}
                     <div className="contact-item">
-                        <p><i className="fa-solid fa-paper-plane"></i> andrewblair800@gmail.com</p>
+                        <p><i className="fa-solid fa-paper-plane"></i> andrewblair390@gmail.com</p>
                         <div className="social-icons">
                             <a href="https://www.linkedin.com/in/andrew-blair-43344438b/" target="_blank"><i className="fa-brands fa-linkedin"></i></a>
                             <a href="https://github.com/andrewblair390" target="_blank"><i className="fa-brands fa-github"></i></a>
@@ -75,7 +73,7 @@ export default function Home() {
              </div>
             {/* Footer */}
             <div className="footer">
-                <p className="special-elite-regular">© 2024 TAMU Guessr. All rights reserved.</p>
+                <p className="special-elite-regular">© 2025 TAMU Guessr. All rights reserved.</p>
             </div>
         </div>
     </div>

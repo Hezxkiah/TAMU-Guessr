@@ -7,9 +7,10 @@ interface Props {
     description: string;
     images: string[];
     reverseZ: boolean;
+    href: string;
 }
 
-export default function Card({ title, description, images, reverseZ }: Props) {
+export default function Card({ title, description, images, reverseZ, href }: Props) {
   // const onMouseOver = (this) => {
   //   // const cardImages = document.querySelectorAll("figure.object-cover")
 
@@ -21,7 +22,7 @@ export default function Card({ title, description, images, reverseZ }: Props) {
   // }
 
   return (
-    <div className={styles.Card + " relative"}>
+    <a className={styles.Card + " relative"} href={href}>
       <figure id="image-holder" className="relative w-full h-64">
         <Image
           src={images[0]}
@@ -46,6 +47,6 @@ export default function Card({ title, description, images, reverseZ }: Props) {
           <button className="btn btn-primary">Buy Now</button>
         </div> */}
       </div>
-    </div>
+    </a>
   );
 }

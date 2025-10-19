@@ -2,7 +2,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import styles from "./Weekly.module.css";
+// Note: Ensure your CSS file is named Challenge.module.css or update the import if necessary
+import styles from "./Challenge.module.css";
 
 // **********************************************
 // * START OF EMBEDDED GAME LOGIC
@@ -16,8 +17,12 @@ let round = 1;
 let totalScore = 0;
 const maxRounds = 5;
 let clickedLocation: google.maps.LatLng | null = null;
+let roundTimer: NodeJS.Timeout | null = null; // Variable to hold the interval ID
 
-// --- DEDICATED LOCATION DEFINITION SECTION (No pano IDs) ---
+// 🎯 Challenge time is 25 seconds
+const INITIAL_TIME = 25; // 25 seconds per round
+
+// --- DEDICATED LOCATION DEFINITION SECTION ---
 const zach = { name: "Zachry Engineering Education Complex", lat: 30.620794, lng:-96.340940 };
 const msc = { name: "Memorial Student Center", lat: 30.61206, lng: -96.34273 };
 const clocktower = { name: "Albritton Bell Tower", lat: 30.61348, lng: -96.34488 };
@@ -65,19 +70,73 @@ const loc_list = [
 ];
 
 
+
 type LocationType = typeof zach;
 let currentLocation: LocationType;
 
 // Functions linked to React state setters
 let updateGameMessage: (message: string) => void;
 let updateRoundInfo: (info: string) => void;
-// updateTimeLeft is no longer needed
+let updateTimeLeft: (time: number) => void; // New setter for the timer
+
+/** Clears the current round timer if it exists. */
+function stopTimer() {
+    if (roundTimer !== null) {
+        clearInterval(roundTimer);
+        roundTimer = null;
+    }
+}
+
+/** Starts the 30-second timer and handles time-out logic. */
+function startTimer() {
+    stopTimer(); // Clear any existing timer
+    let time = INITIAL_TIME;
+    updateTimeLeft(time);
+
+    roundTimer = setInterval(() => {
+        time -= 1;
+        updateTimeLeft(time);
+
+        if (time <= 0) {
+            stopTimer();
+            handleTimeExpired(); // Trigger the time-out logic
+        }
+    }, 1000);
+}
+
+/** Logic executed when the 30 seconds run out. */
+function handleTimeExpired() {
+    const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
+    
+    // Announce time expired
+    updateGameMessage(`🚨 Time's Up for Round ${round}!`);
+    updateRoundInfo('No guess was placed in time. Score: 0.');
+
+    // Disable the map click and guess button
+    confirmBtn.disabled = false; // Enable to allow 'Next Round' click
+    confirmBtn.textContent = "➡️ Next Round";
+    
+    // Remove the current event listener and prepare for the next round
+    confirmBtn.removeEventListener("click", handleConfirmGuess);
+    confirmBtn.addEventListener("click", handleNextRound);
+
+    // If a marker was placed, clear it so it doesn't carry over
+    if (marker) { marker.setMap(null); marker = null; }
+    clickedLocation = null;
+
+    // We do NOT calculate distance or add score (implicitly 0)
+    // The next round logic will be triggered by handleNextRound click.
+}
+
 
 function pickRandomLocation() {
   currentLocation = loc_list[Math.floor(Math.random() * loc_list.length)];
   console.log(`🎯 Target for round ${round}: ${currentLocation.name}`);
-  updateGameMessage(`Round ${round}/${maxRounds}: Guess the location!`);
+  // Update message for challenge mode
+  updateGameMessage(`Round ${round}/${maxRounds} (CHALLENGE): Guess the location!`);
   updateRoundInfo('');
+  
+  startTimer(); // <<< START TIMER HERE
 }
 
 function handleConfirmGuess() {
@@ -86,7 +145,7 @@ function handleConfirmGuess() {
     return;
   }
   
-  // Timer stop logic removed
+  stopTimer(); // <<< STOP TIMER ON GUESS
 
   const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
   confirmBtn.disabled = true;
@@ -141,14 +200,15 @@ function handleConfirmGuess() {
 }
 
 function handlePlayAgain() {
-    // Timer stop logic removed
+    stopTimer(); // Ensure timer is stopped
 
     // Reset all game state variables
     round = 1;
     totalScore = 0;
     clickedLocation = null;
     
-    // Timer display reset logic removed
+    // Reset timer display
+    updateTimeLeft(INITIAL_TIME);
 
     // Clear map markers
     if (marker) { marker.setMap(null); marker = null; }
@@ -190,22 +250,22 @@ function handleNextRound() {
   // Set up new round
   pickRandomLocation();
 
-  // Load the panorama for the new location (using position)
   panorama.setPosition({
     lat: currentLocation.lat,
     lng: currentLocation.lng,
   });
-
-  // Re-apply settings (movement enabled)
+  
+  // Re-apply no-move settings (just in case)
   panorama.setOptions({
     addressControl: false,
     motionTrackingControl: false,
-    panControl: true, 
+    linksControl: false,
+    clickToGo: false, // Ensure this is reapplied
+    panControl: true, // Allow looking around
     zoomControl: false,
     fullscreenControl: false,
     visible: true,
   });
-
 
   map.setCenter({ lat: 30.627977, lng: -96.334407 });
   map.setZoom(14);
@@ -220,33 +280,29 @@ function handleNextRound() {
 function initMapGame() {
   const collegeStation = { lat: 30.627977, lng: -96.334407 };
 
-  // This calls pickRandomLocation
+  // This calls pickRandomLocation, which starts the timer for the first round
   pickRandomLocation();
 
   map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
     center: collegeStation,
     zoom: 14,
   });
-  
-  // Apply movement controls enabled
-  const panoramaOptions: google.maps.StreetViewPanoramaOptions = {
-    // Load panorama based on position (lat/lng)
-    position: { lat: currentLocation.lat, lng: currentLocation.lng }, 
-    
-    pov: { heading: 165, pitch: 0 },
-    zoom: 1,
-    // Movement controls are enabled by default (linksControl and clickToGo omitted/true)
-    addressControl: false,
-    motionTrackingControl: false,
-    panControl: true,    // Allow looking around (panning)
-    zoomControl: false,
-    fullscreenControl: false,
-  };
-
 
   panorama = new google.maps.StreetViewPanorama(
     document.getElementById("street-view") as HTMLElement,
-    panoramaOptions
+    {
+      position: { lat: currentLocation.lat, lng: currentLocation.lng },
+      pov: { heading: 165, pitch: 0 },
+      zoom: 1,
+      // Disable movement controls (links, motion, zoom, fullscreen, and click-to-go)
+      addressControl: false,
+      motionTrackingControl: false,
+      linksControl: false, // Disables the arrows for moving
+      clickToGo: false,    // Disables clicking to move forward in Street View
+      panControl: true,    // Allow looking around (panning)
+      zoomControl: false,
+      fullscreenControl: false,
+    }
   );
 
   map.addListener("click", (event: google.maps.MapMouseEvent) => {
@@ -280,11 +336,17 @@ function initMapGame() {
 
 // --- REACT COMPONENT ---
 
-export default function RoundsPage() {
+/**
+ * Renders the Challenge Game Component.
+ * NOTE: For Next.js App Router, ensure this file is named `ChallengeGame.tsx`
+ * and is imported by `app/challenge/page.tsx`.
+ */
+export default function ChallengeGame() {
   const scriptLoaded = useRef(false);
-  const [gameMessage, setGameMessage] = useState("Loading game...");
+  // Update initial message for challenge mode
+  const [gameMessage, setGameMessage] = useState("Loading Challenge game...");
   const [roundInfo, setRoundInfo] = useState("");
-  // Time state removed
+  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME); // New state for timer
     
   // Initialize Next.js router
   const router = useRouter();
@@ -293,10 +355,12 @@ export default function RoundsPage() {
   useEffect(() => {
     updateGameMessage = setGameMessage;
     updateRoundInfo = setRoundInfo;
-    // updateTimeLeft assignment removed
+    updateTimeLeft = setTimeLeft; // New assignment
     
-    // Cleanup function: now empty as no timer cleanup is needed
-    return () => {}
+    // Cleanup function: important to stop the timer if the component unmounts!
+    return () => {
+        stopTimer();
+    }
   }, []);
 
   useEffect(() => {
@@ -304,6 +368,7 @@ export default function RoundsPage() {
       (window as any).initMapGame = initMapGame;
     }
 
+    // IMPORTANT: Ensure NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is set in your .env.local file
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
     if (!scriptLoaded.current && apiKey && typeof window !== 'undefined' && !(window as any).google) {
@@ -327,34 +392,55 @@ export default function RoundsPage() {
 
   // Define the click handler for the Home button
   const handleGoHome = () => {
-    router.push('/'); // Navigate to the root path
+    stopTimer(); // Crucial: Stop the game timer before navigating away
+    router.push('/'); // Navigate to the root path (which typically renders home/page.tsx)
   };
-  
-  // Timer style logic removed
-  const infoBoxStyle = {
-    position: "absolute" as "absolute",
-    top: 10,
-    left: 10,
-    zIndex: 10,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    color: "white",
-    padding: "10px 15px",
-    borderRadius: 8,
-    boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
-    minWidth: 250,
-    maxWidth: 400,
-    fontSize: 16,
-    lineHeight: 1.4,
+
+  // 🚨 Dynamic panic style: Fades from yellow to red, and gets bolder/larger under 10 seconds.
+  const timerStyle = {
+    fontWeight: 'bold',
+    marginBottom: '5px',
+    fontSize: timeLeft <= 10 && roundTimer !== null ? '20px' : '16px', // Gets bigger
+    color: roundTimer === null
+      ? 'yellow' // Paused/Done color
+      : timeLeft <= 10
+      ? '#ff4444' // Intense Red (Panic Time)
+      : timeLeft <= 17 // Yellow between 25 and 17 seconds
+      ? '#ffcc00' 
+      : 'yellow', 
+    transition: 'all 0.5s ease-in-out', // Smooth transition for the color/size change
   };
 
 
   return (
     <main style={{ height: "100vh", margin: 0, padding: 0, overflow: "hidden", position: "relative" }}>
       {/* Game Message Display Box */}
-      <div style={infoBoxStyle}>
-        <h2 style={{ margin: "0 0 5px 0", fontSize: 18, color: "#500000" }}>Weekly Challenge</h2>
+      <div
+        style={{
+          position: "absolute",
+          top: 10,
+          left: 10,
+          zIndex: 10,
+          backgroundColor: "rgba(0,0,0,0.6)",
+          color: "white",
+          padding: "10px 15px",
+          borderRadius: 8,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
+          minWidth: 250,
+          maxWidth: 400,
+          fontSize: 16,
+          lineHeight: 1.4,
+        }}
+      >
+        {/* Update title for Challenge Mode */}
+        <h2 style={{ margin: "0 0 5px 0", fontSize: 18, color: "#500000" }}>TAMU Guessr - Challenge Mode 🚀</h2>
         
-        {/* Timer Display REMOVED */}
+        {/* Timer Display */}
+        {/* 🚨 APPLY THE NEW, DYNAMIC PANIC STYLE */}
+        <div style={timerStyle}>
+            {roundTimer !== null && `⏳ TIME LEFT: ${timeLeft}s`}
+            {roundTimer === null && 'Game Paused/Complete'}
+        </div>
 
         <p style={{ margin: "0", whiteSpace: "pre-wrap" }}>
           {gameMessage}
@@ -382,8 +468,8 @@ export default function RoundsPage() {
             position: "absolute",
             bottom: 20,
             right: 20,
-            //height: 250,
-            //width: 350,
+            //height: 250, // Removed for adaptive sizing
+            //width: 350,  // Removed for adaptive sizing
             border: "2px solid white",
             borderRadius: 8,
             boxShadow: "0 0 10px rgba(0,0,0,0.7)",
