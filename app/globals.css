@@ -242,10 +242,27 @@ button[type="submit"]:disabled {
     text-align: center;
     font-size: 20px;
     background-color: white;
-    margin-top: 250px;
+    margin-top: 100px;
 }   
 
 /* Cards */
 #cards{
     margin-top: 50px;
+}
+
+/* Icons */
+.contact {
+  font-size: 25px;
+  text-align: center;
+  margin-top: 50px;
+  
+  display: flex;            /* Activates flexbox layout */
+  justify-content: center;  /* Centers the items horizontally */
+  align-items: center;      /* Aligns items vertically */
+  gap: 30px;                /* Adds space between each item (adjust as needed) */
+  flex-wrap: wrap;
+}
+
+.social-icons {
+  margin-top: 10px; 
 }
