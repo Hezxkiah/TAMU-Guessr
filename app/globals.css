@@ -271,3 +271,21 @@ button[type="submit"]:disabled {
 .social-icons {
   margin-top: 10px; 
 }
+
+
+/* styles.css or globals.css */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px); /* optional for a smooth lift */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

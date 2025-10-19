@@ -24,7 +24,7 @@ export default function Home() {
                 <h1 className="special-elite-regular text-50" ><span>Famous TAMU spots!</span></h1>
             </div>
              {/* Game Description */}
-            <div id="about" className={"about-text"}>
+            <div id="about" className="about-text fade-in" style={{ animationDelay: '1.3s' }}>
                 <h2 className="special-elite-regular">About TAMU Guessr</h2>
                 <div className="h-1 my-5 mx-6 bg-white"></div>
                 <p className="special-elite-regular">

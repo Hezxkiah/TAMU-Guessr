@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 
 import styles from "./Round.module.css";
+import { useEffect, useRef, useState } from "react";
+
 
 // **********************************************
 // * START OF EMBEDDED GAME LOGIC
@@ -74,11 +74,9 @@ const loc_list = [
   centree
 ];
 
-
 type LocationType = typeof zach;
 let currentLocation: LocationType;
 
-// Functions linked to React state setters
 let updateGameMessage: (message: string) => void;
 let updateRoundInfo: (info: string) => void;
 
@@ -147,6 +145,9 @@ function handleConfirmGuess() {
   confirmBtn.addEventListener("click", handleNextRound);
 }
 
+/**
+ * Resets game variables and calls initMapGame to start a new game.
+ */
 function handlePlayAgain() {
     // Reset all game state variables
     round = 1;
@@ -164,7 +165,8 @@ function handlePlayAgain() {
     confirmBtn.removeEventListener("click", handlePlayAgain);
     confirmBtn.addEventListener("click", handleConfirmGuess);
 
-    initMapGame(); // Re-initialize the game state
+    // Re-initialize the game state (picks a new location, sets up map/panorama)
+    initMapGame();
 }
 
 function handleNextRound() {
@@ -185,27 +187,20 @@ function handleNextRound() {
     return;
   }
 
-  // Clear map markers and location for new round
-  if (marker) { marker.setMap(null); marker = null; }
-  if (actualMarker) { actualMarker.setMap(null); actualMarker = null; }
-  clickedLocation = null;
-  
-  // Set up new round
   pickRandomLocation();
 
   // 🚨 CORRECTED: Load the panorama using only the LatLngLiteral object
   panorama.setPosition({ lat: currentLocation.lat, lng: currentLocation.lng });
 
-  // Re-apply settings (movement enabled)
-  panorama.setOptions({
-    addressControl: false,
-    motionTrackingControl: false,
-    panControl: true, 
-    zoomControl: false,
-    fullscreenControl: false,
-    visible: true,
-  });
-
+  if (marker) {
+    marker.setMap(null);
+    marker = null;
+  }
+  if (actualMarker) {
+    actualMarker.setMap(null);
+    actualMarker = null;
+  }
+  clickedLocation = null;
 
   map.setCenter({ lat: 30.627977, lng: -96.334407 });
   map.setZoom(14);
@@ -220,33 +215,20 @@ function handleNextRound() {
 function initMapGame() {
   const collegeStation = { lat: 30.627977, lng: -96.334407 };
 
-  // This calls pickRandomLocation
   pickRandomLocation();
 
   map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
     center: collegeStation,
     zoom: 14,
   });
-  
-  // Apply movement controls enabled
-  const panoramaOptions: google.maps.StreetViewPanoramaOptions = {
-    // Load panorama based on position (lat/lng)
-    position: { lat: currentLocation.lat, lng: currentLocation.lng }, 
-    
-    pov: { heading: 165, pitch: 0 },
-    zoom: 1,
-    // Movement controls are enabled by default (linksControl and clickToGo omitted/true)
-    addressControl: false,
-    motionTrackingControl: false,
-    panControl: true,    // Allow looking around (panning)
-    zoomControl: false,
-    fullscreenControl: false,
-  };
-
 
   panorama = new google.maps.StreetViewPanorama(
     document.getElementById("street-view") as HTMLElement,
-    panoramaOptions
+    {
+      position: { lat: currentLocation.lat, lng: currentLocation.lng },
+      pov: { heading: 165, pitch: 0 },
+      zoom: 1,
+    }
   );
 
   map.addListener("click", (event: google.maps.MapMouseEvent) => {
@@ -370,14 +352,14 @@ export default function RoundsPage() {
       >
         {/* Map Container (Mini-Map) */}
         <div
-          className={styles.Map}
           id="map"
+          className={styles.Map}
           style={{
             position: "absolute",
             bottom: 20,
             right: 20,
-            //height: 250,
-            //width: 350,
+            // height: 250,
+            // width: 350,
             border: "2px solid white",
             borderRadius: 8,
             boxShadow: "0 0 10px rgba(0,0,0,0.7)",
@@ -386,36 +368,6 @@ export default function RoundsPage() {
           }}
         ></div>
       </div>
-    
-      {/* HOME BUTTON */}
-      <button
-        onClick={handleGoHome} // Use the new handler
-        style={{
-          position: "absolute",
-          bottom: 80, // Positioned above the Confirm Guess button
-          left: 20,
-          zIndex: 15,
-          padding: "12px 24px",
-          fontSize: 16,
-          borderRadius: 6,
-          border: "none",
-          backgroundColor: "#500000", // Texas A&M Maroon
-          color: "white",
-          cursor: "pointer",
-          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-          userSelect: "none",
-          transition: "background-color 0.3s",
-        }}
-        onMouseOver={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#6a0000";
-        }}
-        onMouseOut={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#500000";
-        }}
-      >
-        🏠 Back to Home
-      </button>
-
 
       {/* Confirm Button */}
       <button
