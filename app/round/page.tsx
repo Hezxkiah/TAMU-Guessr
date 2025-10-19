@@ -208,7 +208,7 @@ function handleNextRound() {
   confirmBtn.addEventListener("click", handleConfirmGuess);
 }
 
-function initMapGame() {
+function initMapGame(): void {
   const collegeStation = { lat: 30.627977, lng: -96.334407 };
 
   pickRandomLocation();

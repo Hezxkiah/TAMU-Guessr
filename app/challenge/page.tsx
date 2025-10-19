@@ -9,7 +9,7 @@ import styles from "./Challenge.module.css";
 // 2. DECLARE GLOBAL INTERFACE (Fixes "no-explicit-any" errors)
 declare global {
   interface Window {
-    initMapGame: () => void;
+    initMapGame?: () => void;
     google: typeof google;
   }
 }
