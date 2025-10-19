@@ -35,13 +35,11 @@ export default function Home() {
             </div >
             {/* Play Cards */}
             <div id = "cards">
-                <a href="/round">
                     <div className={styles.Container}>
-                        <Card title="Casual Round" description="A streetview game seen through the roads of campus!" images={["/academicBuilding.jpg", "/zachary.jpg"]} reverseZ={false}/>
-                        <Card title="Challenge Round" description="Fixed position, 30 second time limit, higher stakes!" images={["/msc.JPG", "/zachary.jpg"]} reverseZ={true}/>
-                        <Card title="Weekly themed game" description="Our Weekly theme! A fun new challenge every single week." images={["/kyleField.jpg", "/rudderTower.jpg"]} reverseZ={false}/>
+                        <Card href="/round" title="Casual Round" description="A streetview game seen through the roads of campus!" images={["/academicBuilding.jpg", "/zachary.jpg"]} reverseZ={false}/>
+                        <Card href="/challenge" title="Challenge Round" description="Fixed position, 30 second time limit, higher stakes!" images={["/msc.JPG", "/zachary.jpg"]} reverseZ={true}/>
+                        <Card href="/weekly" title="Weekly themed game" description="Our Weekly theme! A fun new challenge every single week." images={["/kyleField.jpg", "/rudderTower.jpg"]} reverseZ={false}/>
                     </div>
-                </a>
             </div>
             {/* Linkedins */}
              <div className="contact">
