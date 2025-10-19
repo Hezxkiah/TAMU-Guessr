@@ -37,9 +37,9 @@ export default function Home() {
             <div id = "cards">
                 <a href="/round">
                     <div className={styles.Container}>
-                        <Card title="Quick Round" description="A streetview game seen through the roads of campus!" images={["/academicBuilding.jpg", "/zachary.jpg"]} reverseZ={false}/>
-                        <Card title="Challenge Round" description="No moving around, lower time, higher stakes!" images={["/msc.JPG", "/zachary.jpg"]} reverseZ={true}/>
-                        <Card title="Multiplayer" description="Play with friends through join codes, 5 rounds!" images={["/kyleField.jpg", "/rudderTower.jpg"]} reverseZ={false}/>
+                        <Card title="Casual Round" description="A streetview game seen through the roads of campus!" images={["/academicBuilding.jpg", "/zachary.jpg"]} reverseZ={false}/>
+                        <Card title="Challenge Round" description="Fixed position, 30 second time limit, higher stakes!" images={["/msc.JPG", "/zachary.jpg"]} reverseZ={true}/>
+                        <Card title="Weekly themed game" description="Our Weekly theme! A fun new challenge every single week." images={["/kyleField.jpg", "/rudderTower.jpg"]} reverseZ={false}/>
                     </div>
                 </a>
             </div>
@@ -64,7 +64,7 @@ export default function Home() {
                     </div>
                     {/* Andrew */}
                     <div className="contact-item">
-                        <p><i className="fa-solid fa-paper-plane"></i> andrewblair800@gmail.com</p>
+                        <p><i className="fa-solid fa-paper-plane"></i> andrewblair390@gmail.com</p>
                         <div className="social-icons">
                             <a href="https://www.linkedin.com/in/andrew-blair-43344438b/" target="_blank"><i className="fa-brands fa-linkedin"></i></a>
                             <a href="https://github.com/andrewblair390" target="_blank"><i className="fa-brands fa-github"></i></a>

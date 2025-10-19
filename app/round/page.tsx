@@ -16,11 +16,8 @@ let round = 1;
 let totalScore = 0;
 const maxRounds = 5;
 let clickedLocation: google.maps.LatLng | null = null;
-let roundTimer: NodeJS.Timeout | null = null; // Variable to hold the interval ID
 
-const INITIAL_TIME = 45; // 30 seconds per round
-
-// --- DEDICATED LOCATION DEFINITION SECTION ---
+// --- DEDICATED LOCATION DEFINITION SECTION (No pano IDs) ---
 const zach = { name: "Zachry Engineering Education Complex", lat: 30.620794, lng:-96.340940 };
 const msc = { name: "Memorial Student Center", lat: 30.61206, lng: -96.34273 };
 const clocktower = { name: "Albritton Bell Tower", lat: 30.61348, lng: -96.34488 };
@@ -68,72 +65,19 @@ const loc_list = [
 ];
 
 
-
 type LocationType = typeof zach;
 let currentLocation: LocationType;
 
 // Functions linked to React state setters
 let updateGameMessage: (message: string) => void;
 let updateRoundInfo: (info: string) => void;
-let updateTimeLeft: (time: number) => void; // New setter for the timer
-
-/** Clears the current round timer if it exists. */
-function stopTimer() {
-    if (roundTimer !== null) {
-        clearInterval(roundTimer);
-        roundTimer = null;
-    }
-}
-
-/** Starts the 30-second timer and handles time-out logic. */
-function startTimer() {
-    stopTimer(); // Clear any existing timer
-    let time = INITIAL_TIME;
-    updateTimeLeft(time);
-
-    roundTimer = setInterval(() => {
-        time -= 1;
-        updateTimeLeft(time);
-
-        if (time <= 0) {
-            stopTimer();
-            handleTimeExpired(); // Trigger the time-out logic
-        }
-    }, 1000);
-}
-
-/** Logic executed when the 30 seconds run out. */
-function handleTimeExpired() {
-    const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
-    
-    // Announce time expired
-    updateGameMessage(`🚨 Time's Up for Round ${round}!`);
-    updateRoundInfo('No guess was placed in time. Score: 0.');
-
-    // Disable the map click and guess button
-    confirmBtn.disabled = false; // Enable to allow 'Next Round' click
-    confirmBtn.textContent = "➡️ Next Round";
-    
-    // Remove the current event listener and prepare for the next round
-    confirmBtn.removeEventListener("click", handleConfirmGuess);
-    confirmBtn.addEventListener("click", handleNextRound);
-
-    // If a marker was placed, clear it so it doesn't carry over
-    if (marker) { marker.setMap(null); marker = null; }
-    clickedLocation = null;
-
-    // We do NOT calculate distance or add score (implicitly 0)
-    // The next round logic will be triggered by handleNextRound click.
-}
-
+// updateTimeLeft is no longer needed
 
 function pickRandomLocation() {
   currentLocation = loc_list[Math.floor(Math.random() * loc_list.length)];
   console.log(`🎯 Target for round ${round}: ${currentLocation.name}`);
   updateGameMessage(`Round ${round}/${maxRounds}: Guess the location!`);
   updateRoundInfo('');
-  
-  startTimer(); // <<< START TIMER HERE
 }
 
 function handleConfirmGuess() {
@@ -142,7 +86,7 @@ function handleConfirmGuess() {
     return;
   }
   
-  stopTimer(); // <<< STOP TIMER ON GUESS
+  // Timer stop logic removed
 
   const confirmBtn = document.getElementById("confirmBtn") as HTMLButtonElement;
   confirmBtn.disabled = true;
@@ -197,15 +141,14 @@ function handleConfirmGuess() {
 }
 
 function handlePlayAgain() {
-    stopTimer(); // Ensure timer is stopped
+    // Timer stop logic removed
 
     // Reset all game state variables
     round = 1;
     totalScore = 0;
     clickedLocation = null;
     
-    // Reset timer display
-    updateTimeLeft(INITIAL_TIME);
+    // Timer display reset logic removed
 
     // Clear map markers
     if (marker) { marker.setMap(null); marker = null; }
@@ -247,10 +190,22 @@ function handleNextRound() {
   // Set up new round
   pickRandomLocation();
 
+  // Load the panorama for the new location (using position)
   panorama.setPosition({
     lat: currentLocation.lat,
     lng: currentLocation.lng,
   });
+
+  // Re-apply settings (movement enabled)
+  panorama.setOptions({
+    addressControl: false,
+    motionTrackingControl: false,
+    panControl: true, 
+    zoomControl: false,
+    fullscreenControl: false,
+    visible: true,
+  });
+
 
   map.setCenter({ lat: 30.627977, lng: -96.334407 });
   map.setZoom(14);
@@ -265,21 +220,33 @@ function handleNextRound() {
 function initMapGame() {
   const collegeStation = { lat: 30.627977, lng: -96.334407 };
 
-  // This calls pickRandomLocation, which starts the timer for the first round
+  // This calls pickRandomLocation
   pickRandomLocation();
 
   map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
     center: collegeStation,
     zoom: 14,
   });
+  
+  // Apply movement controls enabled
+  const panoramaOptions: google.maps.StreetViewPanoramaOptions = {
+    // Load panorama based on position (lat/lng)
+    position: { lat: currentLocation.lat, lng: currentLocation.lng }, 
+    
+    pov: { heading: 165, pitch: 0 },
+    zoom: 1,
+    // Movement controls are enabled by default (linksControl and clickToGo omitted/true)
+    addressControl: false,
+    motionTrackingControl: false,
+    panControl: true,    // Allow looking around (panning)
+    zoomControl: false,
+    fullscreenControl: false,
+  };
+
 
   panorama = new google.maps.StreetViewPanorama(
     document.getElementById("street-view") as HTMLElement,
-    {
-      position: { lat: currentLocation.lat, lng: currentLocation.lng },
-      pov: { heading: 165, pitch: 0 },
-      zoom: 1,
-    }
+    panoramaOptions
   );
 
   map.addListener("click", (event: google.maps.MapMouseEvent) => {
@@ -317,7 +284,7 @@ export default function RoundsPage() {
   const scriptLoaded = useRef(false);
   const [gameMessage, setGameMessage] = useState("Loading game...");
   const [roundInfo, setRoundInfo] = useState("");
-  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME); // New state for timer
+  // Time state removed
     
   // Initialize Next.js router
   const router = useRouter();
@@ -326,12 +293,10 @@ export default function RoundsPage() {
   useEffect(() => {
     updateGameMessage = setGameMessage;
     updateRoundInfo = setRoundInfo;
-    updateTimeLeft = setTimeLeft; // New assignment
+    // updateTimeLeft assignment removed
     
-    // Cleanup function: important to stop the timer if the component unmounts!
-    return () => {
-        stopTimer();
-    }
+    // Cleanup function: now empty as no timer cleanup is needed
+    return () => {}
   }, []);
 
   useEffect(() => {
@@ -362,38 +327,34 @@ export default function RoundsPage() {
 
   // Define the click handler for the Home button
   const handleGoHome = () => {
-    stopTimer(); // Crucial: Stop the game timer before navigating away
-    router.push('/'); // Navigate to the root path (which typically renders home/page.tsx)
+    router.push('/'); // Navigate to the root path
+  };
+  
+  // Timer style logic removed
+  const infoBoxStyle = {
+    position: "absolute" as "absolute",
+    top: 10,
+    left: 10,
+    zIndex: 10,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    color: "white",
+    padding: "10px 15px",
+    borderRadius: 8,
+    boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
+    minWidth: 250,
+    maxWidth: 400,
+    fontSize: 16,
+    lineHeight: 1.4,
   };
 
 
   return (
     <main style={{ height: "100vh", margin: 0, padding: 0, overflow: "hidden", position: "relative" }}>
       {/* Game Message Display Box */}
-      <div
-        style={{
-          position: "absolute",
-          top: 10,
-          left: 10,
-          zIndex: 10,
-          backgroundColor: "rgba(0,0,0,0.6)",
-          color: "white",
-          padding: "10px 15px",
-          borderRadius: 8,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.4)",
-          minWidth: 250,
-          maxWidth: 400,
-          fontSize: 16,
-          lineHeight: 1.4,
-        }}
-      >
+      <div style={infoBoxStyle}>
         <h2 style={{ margin: "0 0 5px 0", fontSize: 18, color: "#500000" }}>TAMU Guessr</h2>
         
-        {/* Timer Display */}
-        <div style={{ color: timeLeft <= 10 && roundTimer !== null ? 'red' : 'yellow', fontWeight: 'bold', marginBottom: '5px' }}>
-            {roundTimer !== null && `⏳ Time Left: ${timeLeft} seconds`}
-            {roundTimer === null && 'Game Paused/Complete'}
-        </div>
+        {/* Timer Display REMOVED */}
 
         <p style={{ margin: "0", whiteSpace: "pre-wrap" }}>
           {gameMessage}
@@ -432,7 +393,7 @@ export default function RoundsPage() {
         ></div>
       </div>
     
-      {/* HOME BUTTON: Added above the Confirm Button for better separation */}
+      {/* HOME BUTTON */}
       <button
         onClick={handleGoHome} // Use the new handler
         style={{
