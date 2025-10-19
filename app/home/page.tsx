@@ -9,20 +9,20 @@ export default function Home() {
         <div className="contain">
             {/* Header */}
             <NavBar inLoginPage={false} />
-
             {/* Revellie Image */}
-            <div className="revellie-image">
-                <Image src="/revglobalLogo.png"
+            <div className="revellie-image m-15">
+                <Image src="/guessrLogo.png"
                         width={220}             
                         height={220}            
-                        alt="Revellie"
+                        alt="Tamu Guessr Logo"
                 />
             </div>
             {/* Main Text */}
             <div className="header-text">
-                <h1 className="special-elite-regular">This weeks theme is..</h1>
-                <h1 className="special-elite-regular text-50" ><span>Famous TAMU spots!</span></h1>
+                <h1 className="special-elite-regular fade-in" style={{ animationDelay: '0.3s' }}>This weeks theme is..</h1>
+                <h1 className="special-elite-regular text-50 fade-in" style={{ animationDelay: '0.7s' }}><span>AGGIE LANDMARKS!</span></h1>
             </div>
+
              {/* Game Description */}
             <div id="about" className="about-text fade-in" style={{ animationDelay: '1.3s' }}>
                 <h2 className="special-elite-regular">About TAMU Guessr</h2>
@@ -54,7 +54,7 @@ export default function Home() {
                     </div>
                     {/* Axel */}
                     <div className="contact-item">
-                        <p><i className="fa-solid fa-paper-plane"></i> gaaxel30@gmail.com</p>
+                        <p><i className="fa-solid fa-paper-plane"></i> gaaxel38@gmail.com</p>
                         <div className="social-icons">
                             <a href="https://www.linkedin.com/in/axel-garcia-07b842352/" target="_blank"><i className="fa-brands fa-linkedin"></i></a>
                             <a href="https://github.com/itsoporo" target="_blank"><i className="fa-brands fa-github"></i></a>
