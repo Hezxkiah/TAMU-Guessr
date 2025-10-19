@@ -11,7 +11,12 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  
   {
+    env: {
+      "browser": true,
+      "es2021": true
+    },
     ignores: [
       "node_modules/**",
       ".next/**",

@@ -4,6 +4,15 @@ import styles from "./Round.module.css";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
+declare global {
+  interface Window {
+    google: typeof google;
+    initMapGame?: () => void;
+  }
+}
+
+
+
 // **********************************************
 // * START OF EMBEDDED GAME LOGIC
 // **********************************************

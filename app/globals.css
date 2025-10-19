@@ -110,7 +110,7 @@ nav ul li a:hover::after{
 
 .header-text{
     text-align: center;
-    margin-top: 20%;
+    /* margin-top: 20%; */
     font-size: 30px;
 }
 
@@ -157,7 +157,7 @@ nav ul li a:hover::after{
 .revellie-image{
     display: flex;
     justify-content: center;
-    margin-bottom: -250px;
+    /* margin-bottom: -250px; */
 }
 
 

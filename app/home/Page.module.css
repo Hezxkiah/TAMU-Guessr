@@ -1,8 +1,27 @@
+
+
 .Container {
-    width: auto;
-    height: 300px;
+    height: auto;
     margin-left: 5%;
     margin-right: 5%;
-    display: flex;
-    justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* optional spacing */
+}
+
+/* Items share space evenly */
+.Container > * {
+  flex: 1 1 25%; /* grow/shrink/basis */
+}
+
+/* At smaller screen sizes, stack vertically */
+@media (max-width: 700px) {
+  .Container {
+    flex-direction: column;
+    flex-wrap: nowrap; /* prevent partial wrapping */
+  }
+
+  .Container > * {
+    flex: 1 1 auto; /* reset width control */
+  }
 }
