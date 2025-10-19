@@ -42,6 +42,36 @@ export default function Home() {
                     </div>
                 </a>
             </div>
+            {/* Linkedins */}
+             <div className="contact">
+                <div className="contact">
+                    {/* Hezekiah */}
+                    <div className="contact-item">
+                        <p><i className="fa-solid fa-paper-plane"></i> hezekiahgitenyi24@gmail.com</p>
+                        <div className="social-icons">
+                            <a href="http://www.linkedin.com/in/hezekiah-gitenyi-927282280" target="_blank"><i className="fa-brands fa-linkedin"></i></a>
+                            <a href="https://github.com/Hezxkiah" target="_blank"><i className="fa-brands fa-github"></i></a>
+                        </div>
+                    </div>
+                    {/* Axel */}
+                    <div className="contact-item">
+                        <p><i className="fa-solid fa-paper-plane"></i> gaaxel30@gmail.com</p>
+                        <div className="social-icons">
+                            <a href="https://www.linkedin.com/in/axel-garcia-07b842352/" target="_blank"><i className="fa-brands fa-linkedin"></i></a>
+                            <a href="https://github.com/itsoporo" target="_blank"><i className="fa-brands fa-github"></i></a>
+                        </div>
+                    </div>
+                    {/* Andrew */}
+                    <div className="contact-item">
+                        <p><i className="fa-solid fa-paper-plane"></i> andrewblair800@gmail.com</p>
+                        <div className="social-icons">
+                            <a href="https://www.linkedin.com/in/andrew-blair-43344438b/" target="_blank"><i className="fa-brands fa-linkedin"></i></a>
+                            <a href="https://github.com/andrewblair390" target="_blank"><i className="fa-brands fa-github"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+             </div>
             {/* Footer */}
             <div className="footer">
                 <p className="special-elite-regular">© 2024 TAMU Guessr. All rights reserved.</p>
