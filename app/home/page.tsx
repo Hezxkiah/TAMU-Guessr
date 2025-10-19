@@ -38,7 +38,7 @@ export default function Home() {
                 <a href="/round">
                     <div className={styles.Container}>
                         <Card title="Quick Round" description="A streetview game seen through the roads of campus!" images={["/academicBuilding.jpg", "/zachary.jpg"]} reverseZ={false}/>
-                        <Card title="Challenge Round" description="Restricted to a static image for one second!" images={["/msc.JPG", "/zachary.jpg"]} reverseZ={true}/>
+                        <Card title="Challenge Round" description="No moving around, lower time, higher stakes!" images={["/msc.JPG", "/zachary.jpg"]} reverseZ={true}/>
                         <Card title="Multiplayer" description="Play with friends through join codes, 5 rounds!" images={["/kyleField.jpg", "/rudderTower.jpg"]} reverseZ={false}/>
                     </div>
                 </a>
@@ -75,7 +75,7 @@ export default function Home() {
              </div>
             {/* Footer */}
             <div className="footer">
-                <p className="special-elite-regular">© 2024 TAMU Guessr. All rights reserved.</p>
+                <p className="special-elite-regular">© 2025 TAMU Guessr. All rights reserved.</p>
             </div>
         </div>
     </div>
