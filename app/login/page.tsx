@@ -47,6 +47,8 @@ export default function Home() {
   return (
     <div id="header">
         <NavBar inLoginPage={true} />
+        <title>TAMU Guessr</title>
+        <link rel="icon" href = "/favicon.ico"/>
 
         <div className="contain">
             
