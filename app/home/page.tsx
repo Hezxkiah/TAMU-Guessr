@@ -7,6 +7,8 @@ export default function Home() {
   return (
     <div id="header">
         <div className="contain">
+            <title>TAMU Guessr</title>
+            <link rel="icon" href = "/favicon.ico"/>
             {/* Header */}
             <NavBar inLoginPage={false} />
             {/* Revellie Image */}

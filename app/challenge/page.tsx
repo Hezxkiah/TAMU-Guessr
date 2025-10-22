@@ -44,20 +44,67 @@ const drive = {name:"Main drive",lat:30.619751, lng:-96.334874};
 const haney = {name:"Haney drill field", lat:30.612677, lng:-96.333580};
 const park = {name: "Aggie park", lat:30.609775, lng:-96.338299};
 const duncan = {name:"Duncan",lat:30.611309, lng:-96.335232};
-const _ring = {name:"Aggie ring", lat:30.608837, lng:-96.336240}; // FIX: Renamed 'ring' to '_ring' to fix 'no-unused-vars' warning.
+const _ring = {name:"Aggie ring", lat:30.608837, lng:-96.336240};
 const rec = {name:"Rec center", lat:30.607494, lng:-96.344265};
 const whitecreek = {name:"Whitecreek", lat:30.607281, lng:-96.355118};
 const olsen = {name:"Olsen field", lat:30.605437, lng:-96.342304};
 const wlc = {name:"West campus library", lat:30.612745, lng:-96.350190}
 const sbisa = {name:"SBISA", lat:30.61643, lng:-96.34317};
 const polo = {name:"Polo", lat:30.6164292, lng:-96.3431690};
-const sign = {name:"Sign", lat:30.622730, lng:-96.328971}
-const anth = {name:"Anthropology building", lat:30.617818, lng:-96.339336}
+const sign = {name:"Sign", lat:30.622730, lng:-96.328971};
+const anth = {name:"Anthropology building", lat:30.617818, lng:-96.339336};
+const twelveman = {name:"12th man", lat:30.612058, lng:-96.339987};
+const quad = {name:"The quad", lat:30.614781, lng:-96.338047};
+const pond = {name:"Aggie Pond", lat:30.608953, lng:-96.337527};
+const reed = {name: "Reed Arena", lat:30.605801, lng:-96.345115};
+const centree = {name: "Century Tree", lat:30.615927, lng:-96.341484};
+const centuryTree = {name: "Century Tree", lat:30.615927, lng:-96.341484};
+const ilcb = {name: "ILCB", lat:30.610565, lng:-96.346366};
+const healthSchool = {name: "Health school", lat:30.609206, lng:-96.354612};
+const blocker = {name: "blocker", lat:30.619149, lng:-96.342483};
+const teag = {name: "Teag", lat:30.617367, lng:-96.336590};
+const bioBuilding = {name: "bio building", lat:30.615373, lng:-96.339265};
+const lotB = {name: "Lot b", lat:30.613535, lng:-96.332310};
+const vpHouse = {name: "VP House", lat:30.611509, lng:-96.337250};
+const behindHobby = {name: "behind hobby", lat:30.617642, lng:-96.343885};
+const thompson = {name: "thompson", lat:30.617813, lng:-96.341169};
 
 const loc_list = [
-  zach, msc, clocktower, simpson, kyle, kylehotel, northgate, physics, drive,
-  haney, park, duncan, _ring, rec, whitecreek, olsen, wlc, sbisa, polo, 
-  sign, anth,
+  teag,
+  thompson,
+  healthSchool,
+  behindHobby,
+  vpHouse,
+  bioBuilding,
+  blocker,
+  lotB,
+  ilcb,
+  kylehotel,
+  clocktower,
+  park,
+  twelveman,
+  simpson,
+  polo,
+  whitecreek,
+  reed,
+  _ring,
+  centree,
+  physics,
+  haney,
+  msc,
+  olsen,
+  rec,
+  kyle,
+  zach,
+  quad,
+  sbisa,
+  pond,
+  northgate,
+  anth,
+  wlc,
+  sign,
+  duncan,
+  drive,
 ];
 
 type LocationType = typeof zach;
