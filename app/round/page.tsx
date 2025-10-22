@@ -4,14 +4,17 @@ import styles from "./Round.module.css";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
+// FIX 1: REMOVE THE MODULE IMPORT for Google Maps types to fix the compile error.
+
+// 2. DECLARE GLOBAL INTERFACE (Fixes "no-explicit-any" and global type errors)
 declare global {
   interface Window {
+    initMapGame: () => void;
+
     google: typeof google;
-    initMapGame?: () => void;
+
   }
 }
-
-
 
 // **********************************************
 // * START OF EMBEDDED GAME LOGIC
@@ -40,7 +43,7 @@ const drive = {name:"Main drive",lat:30.619751, lng:-96.334874};
 const haney = {name:"Haney drill field", lat:30.612677, lng:-96.333580};
 const park = {name: "Aggie park", lat:30.609775, lng:-96.338299};
 const duncan = {name:"Duncan",lat:30.611309, lng:-96.335232};
-const _ring = {name:"Aggie ring", lat:30.608837, lng:-96.336240}; // FIX: Renamed 'ring' to '_ring' to fix 'no-unused-vars' warning.
+const _ring = {name:"Aggie ring", lat:30.608837, lng:-96.336240}; 
 const rec = {name:"Rec center", lat:30.607494, lng:-96.344265};
 const whitecreek = {name:"Whitecreek", lat:30.607281, lng:-96.355118};
 const olsen = {name:"Olsen field", lat:30.605437, lng:-96.342304};
@@ -208,7 +211,7 @@ function handleNextRound() {
   confirmBtn.addEventListener("click", handleConfirmGuess);
 }
 
-function initMapGame(): void {
+function initMapGame() {
   const collegeStation = { lat: 30.627977, lng: -96.334407 };
 
   pickRandomLocation();
@@ -310,7 +313,6 @@ export default function RoundsPage() {
     router.push('/');
   };
   
-  // FIX 5: Use `as const` on the whole object to fix `prefer-as-const`
   const infoBoxStyle = {
     position: "absolute",
     top: 10,
