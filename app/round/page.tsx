@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 // 2. DECLARE GLOBAL INTERFACE (Fixes "no-explicit-any" and global type errors)
 declare global {
   interface Window {
-    initMapGame: () => void;
 
     google: typeof google;
     initMapGame: () => void;
