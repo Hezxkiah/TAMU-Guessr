@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 declare global {
   interface Window {
     google: typeof google;
-    initMapGame?: () => void;
+    initMapGame: () => void;
   }
 }
 
@@ -40,7 +40,7 @@ const drive = {name:"Main drive",lat:30.619751, lng:-96.334874};
 const haney = {name:"Haney drill field", lat:30.612677, lng:-96.333580};
 const park = {name: "Aggie park", lat:30.609775, lng:-96.338299};
 const duncan = {name:"Duncan",lat:30.611309, lng:-96.335232};
-const _ring = {name:"Aggie ring", lat:30.608837, lng:-96.336240}; // FIX: Renamed 'ring' to '_ring' to fix 'no-unused-vars' warning.
+const _ring = {name:"Aggie ring", lat:30.608837, lng:-96.336240};
 const rec = {name:"Rec center", lat:30.607494, lng:-96.344265};
 const whitecreek = {name:"Whitecreek", lat:30.607281, lng:-96.355118};
 const olsen = {name:"Olsen field", lat:30.605437, lng:-96.342304};
@@ -54,11 +54,53 @@ const quad = {name:"The quad", lat:30.614781, lng:-96.338047};
 const pond = {name:"Aggie Pond", lat:30.608953, lng:-96.337527};
 const reed = {name: "Reed Arena", lat:30.605801, lng:-96.345115};
 const centree = {name: "Century Tree", lat:30.615927, lng:-96.341484};
+const centuryTree = {name: "Century Tree", lat:30.615927, lng:-96.341484};
+const ilcb = {name: "ILCB", lat:30.610565, lng:-96.346366};
+const healthSchool = {name: "Health school", lat:30.609206, lng:-96.354612};
+const blocker = {name: "blocker", lat:30.619149, lng:-96.342483};
+const teag = {name: "Teag", lat:30.617367, lng:-96.336590};
+const bioBuilding = {name: "bio building", lat:30.615373, lng:-96.339265};
+const lotB = {name: "Lot b", lat:30.613535, lng:-96.332310};
+const vpHouse = {name: "VP House", lat:30.611509, lng:-96.337250};
+const behindHobby = {name: "behind hobby", lat:30.617642, lng:-96.343885};
+const thompson = {name: "thompson", lat:30.617813, lng:-96.341169};
 
 const loc_list = [
-  zach, msc, clocktower, simpson, kyle, kylehotel, northgate, physics, drive,
-  haney, park, duncan, _ring, rec, whitecreek, olsen, wlc, sbisa, polo, 
-  sign, anth, twelveman, quad, pond, reed, centree
+  teag,
+  thompson,
+  healthSchool,
+  behindHobby,
+  vpHouse,
+  bioBuilding,
+  blocker,
+  lotB,
+  ilcb,
+  kylehotel,
+  clocktower,
+  park,
+  twelveman,
+  simpson,
+  polo,
+  whitecreek,
+  reed,
+  _ring,
+  centree,
+  physics,
+  haney,
+  msc,
+  olsen,
+  rec,
+  kyle,
+  zach,
+  quad,
+  sbisa,
+  pond,
+  northgate,
+  anth,
+  wlc,
+  sign,
+  duncan,
+  drive,
 ];
 
 type LocationType = typeof zach;
@@ -72,7 +114,7 @@ function pickRandomLocation() {
     let newLocation: LocationType;
     
     do {
-        newLocation = loc_list[Math.floor(Math.random() * loc_list.length)];
+        newLocation = loc_list[Math.floor(Math.random()*(Math.floor(Math.random() * loc_list.length)))];
     } while (newLocation === previousLocation && loc_list.length > 1);
 
     currentLocation = newLocation;
