@@ -3,6 +3,7 @@ import Card from "../components/Card";
 import styles from "./Page.module.css"
 import NavBar from "../components/NavBar";
 
+
 export default function Home() {
   return (
     <div id="header">

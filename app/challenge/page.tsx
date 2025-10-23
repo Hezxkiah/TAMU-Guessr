@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 
 import styles from "./Challenge.module.css";
 
+
 // FIX 1: REMOVE THE MODULE IMPORT for Google Maps types to fix the compile error.
 
 // 2. DECLARE GLOBAL INTERFACE (Fixes "no-explicit-any" errors)
